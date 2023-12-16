@@ -620,7 +620,5 @@ public class SQLJavaBridge {
         return 0;
     }
 
-//    public List<JsonObject> queryMany(String query) {
-//        return null;
-//    }
+
 }

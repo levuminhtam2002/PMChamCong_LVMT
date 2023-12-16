@@ -1,50 +1,62 @@
 package hust.project.base.modified.Model;
 
-import java.sql.Timestamp;
+import java.sql.Date;
+import java.sql.Time;
 
 public class AttendanceRecordDTO {
 
     private String recordId;
     private String employeeId;
     private String fingerscannerId;
-    private Timestamp timestamp;
-    private String attendanceType;
+    private String date;
+    private String time;
 
+    public AttendanceRecordDTO(String recordId, String employeeId, String fingerscannerId, String date, String time) {
+        this.recordId = recordId;
+        this.employeeId = employeeId;
+        this.fingerscannerId = fingerscannerId;
+        this.date = date;
+        this.time = time;
+    }
 
     public String getRecordId() {
         return recordId;
-    }
-    public String getEmployeeId() {
-        return employeeId;
-    }
-    public String getFingerscannerId() {
-        return fingerscannerId;
-    }
-
-    public Timestamp getTimestamp() {
-        return timestamp;
-    }
-
-    public String getAttendanceType() {
-        return attendanceType;
     }
 
     public void setRecordId(String recordId) {
         this.recordId = recordId;
     }
 
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
     public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public String getFingerscannerId() {
+        return fingerscannerId;
     }
 
     public void setFingerscannerId(String fingerscannerId) {
         this.fingerscannerId = fingerscannerId;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public String getDate() {
+        return date;
     }
 
-    public void setAttendanceType(String attendanceType) {
-        this.attendanceType = attendanceType;    }
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
 }

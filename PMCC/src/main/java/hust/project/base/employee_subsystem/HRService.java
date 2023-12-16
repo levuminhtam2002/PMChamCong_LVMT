@@ -11,54 +11,85 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class HRService {
-    public Employee getEmployee(int id){
-        try{
+public class HRService implements IHRService {
+    public Employee getEmployee(String employeeId) {
+        try {
             SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-            String query = "SELECT id,name,code FROM employee WHERE id = ?";
-            JsonObject json = bridge.queryOne(query, id);
+            String query = "SELECT employee_id, name, department_id, employee_type FROM employees WHERE employee_id = ?";
+            JsonObject json = bridge.queryOne(query, employeeId);
             String name = json.get("name").getAsString();
-            String code = json.get("code").getAsString();
-            return new Employee(id, name, code);
-        }catch (Exception e){
-            return new Employee(0, "0", "0");
+            String departmentId = json.get("department_id").getAsString();
+            String employeeType = json.get("employee_type").getAsString();
+            return new Employee(employeeId, name, departmentId, employeeType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Employee();
         }
     }
-////    public department
-//    public Department getDepartment(int id){
-//        try{
-//            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-//            String query = "SELECT id,name FROM department WHERE id = ?";
-//            JsonObject json = bridge.queryOne(query, id);
-//            String name = json.get("name").getAsString();
-//            return new Department(id, name);
-//        }catch (Exception e){
-//            return new Department(0, "0");
-//        }
-//    }
-    public List<String> getListDepartments(int adminID){
+
+    public Department getDepartment(String departmentId) {
+        try {
+            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+            String query = "SELECT department_id, department_name FROM departments WHERE department_id = ?";
+            JsonObject json = bridge.queryOne(query, departmentId);
+            String departmentName = json.get("department_name").getAsString();
+            return new Department(departmentId, departmentName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Department();
+        }
+    }
+//    get all employee
+    public List<Employee> getAllEmployee(){
         try{
             SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-            String query = "SELECT d.name FROM department d JOIN employee_department ed ON d.id = ed.department_id WHERE ed.employee_id = ? AND (ed.position = 3 OR ed.position = 4)";
-            JsonArray array = bridge.query(query, adminID);
-//            List<String> result = array.asList().stream().map(e -> e.getAsJsonObject().get("name").getAsString()).toList();
-            List<String> result = new ArrayList<>();
-            for(int i = 0; i < array.size(); i++){
-                JsonObject json = array.get(i).getAsJsonObject();
-                result.add(json.get("name").getAsString());
+            String query = "SELECT employee_id, name, department_id, employee_type FROM employees";
+            JsonArray json = bridge.query(query);
+            List<Employee> employees = new ArrayList<>();
+            for (JsonElement element : json) {
+                String employeeId = element.getAsJsonObject().get("employee_id").getAsString();
+                String name = element.getAsJsonObject().get("name").getAsString();
+                String departmentId = element.getAsJsonObject().get("department_id").getAsString();
+                String employeeType = element.getAsJsonObject().get("employee_type").getAsString();
+                employees.add(new Employee(employeeId, name, departmentId, employeeType));
             }
-            System.out.println("list department: " + result);
-            return result;
+            return employees;
         }catch (Exception e){
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
-    public List<Summary> getSummary(){
+//get department by id
+    public Department getDepartmentById(String departmentId){
         try{
-            return null;
+            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+            String query = "SELECT department_id, department_name FROM departments WHERE department_id = ?";
+            JsonObject json = bridge.queryOne(query, departmentId);
+            String departmentName = json.get("department_name").getAsString();
+            return new Department(departmentId, departmentName);
         }catch (Exception e){
+            e.printStackTrace();
+            return new Department();
+        }
+    }
+
+
+    public List<Department> getAllDepartment() {
+        try {
+            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+            String query = "SELECT department_id, department_name FROM departments";
+            JsonArray json = bridge.query(query);
+            List<Department> departments = new ArrayList<>();
+            for (JsonElement element : json) {
+                String departmentId = element.getAsJsonObject().get("department_id").getAsString();
+                String departmentName = element.getAsJsonObject().get("department_name").getAsString();
+                departments.add(new Department(departmentId, departmentName));
+            }
+            return departments;
+        } catch (Exception e) {
+            e.printStackTrace();
             return new ArrayList<>();
         }
     }
+
 }

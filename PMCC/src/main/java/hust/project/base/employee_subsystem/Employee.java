@@ -1,15 +1,30 @@
 package hust.project.base.employee_subsystem;
 
 public class Employee {
-    private int id;
+    private String employeeId; // Changed from int to String to match char type in DB
     private String name;
-    private String code;
-    public int getId() {
-        return id;
+    private String departmentId; // Added field
+    private String employeeType; // Added field
+
+    // Constructor
+    public Employee(String employeeId, String name, String departmentId, String employeeType) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.departmentId = departmentId;
+        this.employeeType = employeeType;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    // Default constructor
+    public Employee() {
+    }
+
+    // Getters and setters
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getName() {
@@ -19,21 +34,20 @@ public class Employee {
     public void setName(String name) {
         this.name = name;
     }
-    public String getCode() {
-        return code;
+
+    public String getDepartmentId() {
+        return departmentId;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 
-
-    public Employee(int id, String name, String code) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
+    public String getEmployeeType() {
+        return employeeType;
     }
 
-    public Employee() {
+    public void setEmployeeType(String employeeType) {
+        this.employeeType = employeeType;
     }
 }

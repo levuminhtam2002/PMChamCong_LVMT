@@ -6,6 +6,7 @@ import hust.project.base.home.HomeController;
 import hust.project.base.modified.Model.ModifiedDAO;
 
 import hust.project.base.modified.Model.AttendanceRecordRepository;
+import hust.project.base.modified.Model.ModifiedRepository;
 import hust.project.base.summary_logs.SummaryDepartmentController;
 import hust.project.base.summary_logs.SummaryDepartmentView;
 import hust.project.base.modified.View.PendingModifiedView;
@@ -52,7 +53,8 @@ public class NavBarController {
                         System.out.println("navigated to Detail!");
                         break;
                     case MODIFIED_SCREEN:
-                        AttendanceRecordRepository repository = new ModifiedDAO();
+//                        AttendanceRecordRepository repository = new ModifiedDAO();
+                        ModifiedRepository repository = new ModifiedDAO();
                         PendingModifiedView modifiedView = new PendingModifiedView(repository);
                         new ModifiedController(modifiedView);
                         HomeController.instance().changeScreen(modifiedView);

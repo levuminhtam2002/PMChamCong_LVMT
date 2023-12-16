@@ -1,35 +1,33 @@
 package hust.project.base.modified.Model;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
-
 public class ModifiedDTO {
-    private String recordId;
-    private String employeeId; // Assuming we just want the ID here
-//    private String timestampafter;
-//    private String timestampbefore;
-
-    private Timestamp timestampafter;
-    private Timestamp timestampbefore;
-    private String attendanceType;
-    private String scanId;
     private String requestId;
+    private String recordId;
+    private String scanId; //khong can
+    private String employeeId;
+    private String date;
+    private String time;
+    private String timeModified;
+    private String dateModified;
     private String requestReason;
     private String requestStatus;
 
-    public ModifiedDTO(String recordId, String employeeId, Timestamp timestampafter, Timestamp timestampbefore, String attendanceType, String scanId, String requestId, String requestReason, String requestStatus) {
-        this.recordId = recordId;
-        this.employeeId = employeeId;
-        this.timestampafter = timestampafter;
-        this.timestampbefore = timestampbefore;
-        this.attendanceType = attendanceType;
-        this.scanId = scanId;
+    // Constructor
+    public ModifiedDTO(String requestId, String recordId, String scanId, String employeeId, String date, String time, String timeModified, String dateModified, String requestReason, String requestStatus) {
         this.requestId = requestId;
+        this.recordId = recordId;
+        this.scanId = scanId;
+        this.employeeId = employeeId;
+        this.date = date;
+        this.time = time;
+        this.timeModified = timeModified;
+        this.dateModified = dateModified;
         this.requestReason = requestReason;
         this.requestStatus = requestStatus;
-
     }
-
-
 
     public String getRecordId() {
         return recordId;
@@ -43,31 +41,32 @@ public class ModifiedDTO {
     public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
     }
-//    public String getTimestampafter() {
-//        return timestampafter;
-//    }
-//    public void setTimestampafter(String timestampafter){
-//        this.timestampafter = timestampafter;
-//    }
-//    public String getTimestampbefore() {
-//        return timestampbefore;    }
-//   public void setTimestampbefore(String timestampbefore) {this.timestampbefore = timestampbefore; }
-    public Timestamp getTimestampafter() {
-        return timestampafter;
+
+    public String getDate() {
+        return date;
     }
-    public void setTimestampafter(Timestamp timestampafter){
-        this.timestampafter = timestampafter;
+    public void setDate(String date) {
+        this.date = date;
     }
-    public Timestamp getTimestampbefore() {
-        return timestampbefore;    }
-    public void setTimestampbefore(Timestamp timestampbefore) {this.timestampbefore = timestampbefore; }
-    public String getAttendanceType() {
-        return attendanceType;
+    public String getTime() {
+        return time;
     }
-    public void setAttendanceType(String attendanceType) {
-        this.attendanceType = attendanceType;
+    public void setTime(String time) {
+        this.time = time;
     }
-    public String getScanId() {
+    public String getTimeModified() {
+        return timeModified;
+    }
+    public void setTimeModified(String timeModified) {
+        this.timeModified = timeModified;
+    }
+    public String getDateModified() {
+        return dateModified;
+    }
+    public void setDateModified(String dateModified) {
+        this.dateModified = dateModified;
+    }
+        public String getScanId() {
         return scanId;
     }
     public void setScanId(String scanId) {
