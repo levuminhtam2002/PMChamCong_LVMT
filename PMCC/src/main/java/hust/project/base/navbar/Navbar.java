@@ -45,7 +45,7 @@ public class Navbar extends BorderPane {
         imageView.setFitWidth(40);
         Label label = new Label("PHẦN MỀM CHẤM CÔNG");
         label.setPrefHeight(150);
-        label.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #000000");
+        label.setStyle("-fx-font-size: 15px; -fx-font-family: 'Arial'; -fx-font-weight: bold; -fx-text-fill: #000000");
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER_LEFT);
         hbox.setSpacing(10);
@@ -66,7 +66,7 @@ public class Navbar extends BorderPane {
         buttons.setPrefWidth(NAVBAR_WIDTH);
         buttons.setPrefHeight(APPLICATION_HEIGHT*0.4);
 
-        String styledButton = "-fx-background-color: #989692; -fx-text-fill: black; -fx-padding : 10px;   -fx-font-size: 16px";
+        String styledButton = "-fx-background-color: #989692;-fx-font-family: 'Arial'; -fx-text-fill: black; -fx-padding : 10px;   -fx-font-size: 16px";
         Button homeButton = new Button("  Màn hình chính");
         ImageView homeImage = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/Home.png"))));
         homeImage.setFitHeight(20);
@@ -108,7 +108,7 @@ public class Navbar extends BorderPane {
         detailLogs.setStyle(styledButton);
         detailLogs.setAlignment(Pos.CENTER_LEFT);
 
-        Button modifiedLogs = new Button("  Duyệt yêu cẩu chỉnh sửa");
+        Button modifiedLogs = new Button("  Duyệt yêu cầu chỉnh sửa");
         ImageView modifiedImage = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/Request.png"))));
         modifiedImage.setFitHeight(20);
         modifiedImage.setFitWidth(20);
@@ -117,14 +117,12 @@ public class Navbar extends BorderPane {
         modifiedLogs.setPrefHeight(APPLICATION_HEIGHT*0.1);
         modifiedLogs.setStyle(styledButton);
         modifiedLogs.setAlignment(Pos.CENTER_LEFT);
-        
 
         homeButton.setOnAction(event -> navbarAction.navigate(Route.HOME_SCREEN));
         dashboardButton.setOnAction(event -> navbarAction.navigate(Route.DASHBOARD_SCREEN));
         summaryLogs.setOnAction(event -> navbarAction.navigate(Route.SUMMARY_DEPARTMENT_SCREEN));
         detailLogs.setOnAction(e -> System.out.println("Go to detailLogs"));
         modifiedLogs.setOnAction(e -> navbarAction.navigate(Route.MODIFIED_SCREEN));
-//        modifiedLogs.setOnAction(event -> navbarAction.navigate(Route.MODIFIED_SCREEN));
         buttons.getChildren().addAll(homeButton, dashboardButton, summaryLogs, detailLogs, modifiedLogs);
         return buttons;
     }
@@ -132,12 +130,10 @@ public class Navbar extends BorderPane {
         BorderPane pane = new BorderPane();
         pane.setStyle("-fx-background-color: #ffffff");
         pane.setPrefHeight(APPLICATION_HEIGHT * 0.15);
-//        Line line = new Line(1, 0, NAVBAR_WIDTH, 0);
         Button detailLogs = new Button("Đăng Xuất");
         detailLogs.setPrefWidth(NAVBAR_WIDTH*0.99);
         detailLogs.setPrefHeight(APPLICATION_HEIGHT*0.1);
-        detailLogs.setStyle("-fx-background-color: #C0C0C0; -fx-text-fill: black; -fx-padding : 10px; -fx-font-weight: bold; -fx-font-size: 16px");
-//        pane.setTop(line);
+        detailLogs.setStyle("-fx-background-color: #C0C0C0;-fx-font-family: 'Arial'; -fx-text-fill: black; -fx-padding : 10px; -fx-font-weight: bold; -fx-font-size: 16px");
         pane.setCenter(detailLogs);
         return pane;
     }

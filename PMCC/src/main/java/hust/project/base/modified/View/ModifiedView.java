@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.Modality;
 
 
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
@@ -98,10 +99,11 @@ public class ModifiedView {
         cancelButton.setStyle("-fx-background-color: grey; -fx-text-fill: white;");
         buttonLayout.getChildren().addAll(acceptButton, rejectButton, cancelButton);
         layout.getChildren().add(buttonLayout);
-
-        acceptButton.setOnAction(e -> handleAccept());
-        rejectButton.setOnAction(e -> handleReject());
+        adjustUIBasedOnStatus(data.getRequestStatus(), buttonLayout);
+        acceptButton.setOnAction(e -> handleAccept(data));
+        rejectButton.setOnAction(e -> handleReject(data));
         cancelButton.setOnAction(e -> window.close());
+
         Scene scene = new Scene(layout, APPLICATION_WIDTH * 0.6, APPLICATION_HEIGHT * 0.6);
         window.setScene(scene);
         window.showAndWait();
@@ -111,7 +113,7 @@ private void initializeFormFields(ModifiedDTO data, Employee employee, Departmen
     nameField = new TextField(employee.getName ()); // Assuming you have a method to get employee name
     employeeIdField = new TextField(data.getEmployeeId());
     departmentNameField = new TextField (department.getDepartmentName ());
-    approverField = new TextField("lvmt"); // You'll need to fetch approver data
+    approverField = new TextField("Lê Vũ Minh Tâm"); // You'll need to fetch approver data
     dateField = new TextField(record.getDate());
     noteField = new TextField(data.getRequestReason());
     requestIdField = new TextField(data.getRequestId());
@@ -224,14 +226,23 @@ private void initializeFormFields(ModifiedDTO data, Employee employee, Departmen
         createdDateField.setStyle("-fx-background-color: white");
         scannerIdField.setStyle("-fx-background-color: white");
     }
-
-    private void handleAccept() {
-        AcceptView acceptView = new AcceptView();
-        acceptView.display();
+    private void adjustUIBasedOnStatus(String status, HBox buttonLayout){
+        if ("Accepted".equals(status) || "Rejected".equals(status)) {
+            buttonLayout.setVisible(false); // Hide buttons
+        }
+        if ("Pending".equals(status)) {
+            disableTextFields();
+            disableTextColor();
+        }
     }
 
-    private void handleReject() {
+    private void handleAccept(ModifiedDTO data) {
+        AcceptView acceptView = new AcceptView();
+        acceptView.display(data);
+    }
+
+    private void handleReject(ModifiedDTO data) {
         RejectView rejectView = new RejectView();
-        rejectView.display();
+        rejectView.display(data);
     }
 }

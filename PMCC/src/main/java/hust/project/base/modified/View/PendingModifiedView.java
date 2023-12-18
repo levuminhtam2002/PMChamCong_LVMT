@@ -2,7 +2,6 @@ package hust.project.base.modified.View;
 import hust.project.base.employee_subsystem.Employee;
 import hust.project.base.employee_subsystem.HRService;
 import hust.project.base.employee_subsystem.IHRService;
-import hust.project.base.header.SearchCallBack;
 import hust.project.base.modified.Model.AttendanceRecordDTO;
 import hust.project.base.modified.Model.AttendanceRecordRepository;
 import hust.project.base.modified.Model.ModifiedDTO;
@@ -36,7 +35,6 @@ public class PendingModifiedView extends VBox  {
 
     public  PendingModifiedView(ModifiedRepository repo){
         this.modifiedRepository = repo;
-
         setSpacing(20);
         setPrefWidth(MAIN_WIDTH * 0.7);
         setMaxWidth(MAIN_WIDTH * 0.84);
@@ -46,9 +44,10 @@ public class PendingModifiedView extends VBox  {
     }
     private TableView<ModifiedDTO> createRequestTable() {
         TableView<ModifiedDTO> requestTable = new TableView<>();
+
         if (modifiedRepository == null) {
             System.out.println("modifiedRepository is null!");
-            return null; // or handle the null scenario appropriately
+            return null;
         }
 
 
@@ -63,7 +62,6 @@ public class PendingModifiedView extends VBox  {
         });
         TableColumn<ModifiedDTO, Number> sttCol = new TableColumn<>("STT");
         sttCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper<>(requestTable.getItems().indexOf(column.getValue()) + 1));
-
 //        TableColumn<ModifiedDTO, String> requestIdCol = new TableColumn<>("Mã yêu cầu");
 //        requestIdCol.setCellValueFactory(new PropertyValueFactory<>("requestId"));
 //        TableColumn<ModifiedDTO, String> recordIdCol = new TableColumn<>("Mã hồ sơ");
@@ -73,29 +71,60 @@ public class PendingModifiedView extends VBox  {
         TableColumn<ModifiedDTO, String> employeeIdCol = new TableColumn<>("Nhân viên");
         employeeIdCol.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
 
-        TableColumn<ModifiedDTO, String> dateCol = new TableColumn<>("Ngày");
+        TableColumn<ModifiedDTO, String> dateCol = new TableColumn<>("Ngày checkin");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        TableColumn<ModifiedDTO, String> timeCol = new TableColumn<>("Thời gian");
+        TableColumn<ModifiedDTO, String> timeCol = new TableColumn<>("Giờ checkin");
         timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
 
-        TableColumn<ModifiedDTO, String> timeModifiedCol = new TableColumn<>("Thời gian chỉnh sửa");
+        TableColumn<ModifiedDTO, String> timeModifiedCol = new TableColumn<>("Giờ duyệt");
         timeModifiedCol.setCellValueFactory(new PropertyValueFactory<>("timeModified"));
+        timeModifiedCol.setMaxWidth (100);
 
-        TableColumn<ModifiedDTO, String> dateModifiedCol = new TableColumn<>("Ngày chỉnh sửa");
+        TableColumn<ModifiedDTO, String> dateModifiedCol = new TableColumn<>("Ngày duyệt");
         dateModifiedCol.setCellValueFactory(new PropertyValueFactory<>("dateModified"));
+        dateModifiedCol.setMaxWidth (100);
 
-        TableColumn<ModifiedDTO, String> requestReasonCol = new TableColumn<>("Lý do yêu cầu");
+        TableColumn<ModifiedDTO, String> requestReasonCol = new TableColumn<>("Ghi chú");
         requestReasonCol.setCellValueFactory(new PropertyValueFactory<>("requestReason"));
+        requestReasonCol.setMaxWidth(200);
 
         TableColumn<ModifiedDTO, String> requestStatusCol = new TableColumn<>("Trạng thái");
         requestStatusCol.setCellValueFactory(new PropertyValueFactory<>("requestStatus"));
+        requestStatusCol.setCellFactory(column -> {
+            return new TableCell<ModifiedDTO, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        // Set text of cell to item
+                        setText(item);
+
+                        // Set the color based on the text
+                        if (item.equals("Accepted")) {
+                            setStyle("-fx-text-fill: green;");
+                        } else if (item.equals("Rejected")) {
+                            setStyle("-fx-text-fill: red;");
+                        } else if (item.equals("Pending")) {
+                            setStyle("-fx-text-fill: orange;"); // Using orange for better visibility instead of yellow
+                        } else {
+                            setStyle("");
+                        }
+                    }
+                }
+            };
+        });
 
         TableColumn<ModifiedDTO, Void> actionCol = new TableColumn<>("Hành động");
         // Assume cellFactory is defined elsewhere
         actionCol.setCellFactory(cellFactory);
-        requestTable.getColumns().addAll(sttCol,  employeeIdCol,dateCol, timeCol, timeModifiedCol, dateModifiedCol, requestReasonCol, requestStatusCol, actionCol);
+        requestTable.getColumns().addAll(sttCol, employeeIdCol, timeCol,dateCol,requestReasonCol, requestStatusCol, timeModifiedCol, dateModifiedCol,  actionCol);
         requestTable.setPrefHeight(25 * 18);
+
         requestTable.setItems(FXCollections.observableArrayList(modifiedDTOList));
 
 
@@ -129,7 +158,6 @@ public class PendingModifiedView extends VBox  {
                         openModidiedView(data);
                     });
                 }
-
                 @Override
                 public void updateItem(Void item, boolean empty) {
                     super.updateItem(item, empty);

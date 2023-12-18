@@ -11,6 +11,9 @@ import hust.project.base.modified.Model.ModifiedDTO;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,11 +42,11 @@ public class ModifiedDAO implements ModifiedRepository {
         if (date == null) {
             return null;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        SimpleDateFormat dateFormat = new SimpleDateFormat (DATE_FORMAT);
         try {
-            return dateFormat.parse(date);
+            return dateFormat.parse (date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            e.printStackTrace ();
             return null;
         }
     }
@@ -63,53 +66,66 @@ public class ModifiedDAO implements ModifiedRepository {
         }
     }
 
-    public void updateModifiedStatus() {
-        try {
-            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-            // Cập nhật trạng thái từ "pending" thành "accept"
-            String updateAcceptQuery = "UPDATE modifiedattendancerecords SET request_status = 'accept' WHERE request_status = 'pending'";
-            bridge.update(updateAcceptQuery);
-            // Cập nhật trạng thái từ "pending" thành "reject"
-            String updateRejectQuery = "UPDATE modifiedattendancerecords SET request_status = 'reject' WHERE request_status = 'pending'";
-            bridge.update(updateRejectQuery);
-            System.out.println("Cập nhật trạng thái thành công.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        }
-
     public List<ModifiedDTO> getAllModifiedDTO() {
         try {
-            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+            SQLJavaBridge bridge = DatabaseManager.instance ().defaulSQLJavaBridge ();
             String query = "SELECT request_id, record_id, scan_id, employee_id, date, time, time_modified, date_modified, request_reason, request_status FROM pmchamcong.modifiedattendancerecords";
-            JsonArray json = bridge.query(query);
-            List<ModifiedDTO> modifiedRequests = new ArrayList<>();
+            JsonArray json = bridge.query (query);
+            List<ModifiedDTO> modifiedRequests = new ArrayList<> ();
             for (JsonElement element : json) {
-                JsonObject obj = element.getAsJsonObject();
-                String requestId = obj.get("request_id").getAsString();
-                String recordId = obj.get("record_id").getAsString();
-                String scanId = obj.get("scan_id").getAsString();
-                String employeeId = obj.get("employee_id").getAsString();
-                String date = obj.get("date").getAsString();
-                String time = obj.get("time").getAsString();
-                String timeModified = obj.has("time_modified") && !obj.get("time_modified").isJsonNull() ? obj.get("time_modified").getAsString() : "******";
-                String dateModified = obj.has("date_modified") && !obj.get("date_modified").isJsonNull() ? obj.get("date_modified").getAsString() : "******";
-                String requestReason = obj.get("request_reason").getAsString();
-                String requestStatus = obj.get("request_status").getAsString();
+                JsonObject obj = element.getAsJsonObject ();
+                String requestId = obj.get ("request_id").getAsString ();
+                String recordId = obj.get ("record_id").getAsString ();
+                String scanId = obj.get ("scan_id").getAsString ();
+                String employeeId = obj.get ("employee_id").getAsString ();
+                String date = obj.get ("date").getAsString ();
+                String time = obj.get ("time").getAsString ();
+                String timeModified = obj.has ("time_modified") && !obj.get ("time_modified").isJsonNull () ? obj.get ("time_modified").getAsString () : "******";
+                String dateModified = obj.has ("date_modified") && !obj.get ("date_modified").isJsonNull () ? obj.get ("date_modified").getAsString () : "******";
+                String requestReason = obj.get ("request_reason").getAsString ();
+                String requestStatus = obj.get ("request_status").getAsString ();
+                ModifiedDTO modifiedDTO = new ModifiedDTO (requestId, recordId, scanId, employeeId, date, time, timeModified, dateModified, requestReason, requestStatus);
+//                // In thông tin của ModifiedDTO theo định dạng yêu cầu
+//                System.out.println("requestId: \"" + modifiedDTO.getRequestId() + "\".");
+//                System.out.println("Status: \"" + modifiedDTO.getRequestStatus() + "\".");
+//                System.out.println("Reason: \"" + modifiedDTO.getRequestReason() + "\".");
+//                System.out.println("----------------");
 
-                ModifiedDTO modifiedDTO = new ModifiedDTO(requestId, recordId, scanId, employeeId, date, time, timeModified, dateModified, requestReason, requestStatus);
-                // In thông tin của ModifiedDTO theo định dạng yêu cầu
-                System.out.println("requestId: \"" + modifiedDTO.getRequestId() + "\".");
-                System.out.println("Status: \"" + modifiedDTO.getRequestStatus() + "\".");
-                System.out.println("Reason: \"" + modifiedDTO.getRequestReason() + "\".");
-                System.out.println("----------------");
-
-                modifiedRequests.add(modifiedDTO);
+                modifiedRequests.add (modifiedDTO);
             }
             return modifiedRequests;
         } catch (Exception e) {
+            e.printStackTrace ();
+            return new ArrayList<> ();
+        }
+    }
+
+
+
+    public void updateAcceptModifiedStatus(String requestId) {
+        SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+        try {
+
+            String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            String query2 = "UPDATE modifiedattendancerecords SET request_status = 'Accepted', date_modified = ?, time_modified = ? WHERE request_id = ?";
+            bridge.update(query2, currentDate, currentTime, requestId);
+
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
+        }
+    }
+    public void updateRejectModifiedStatus(String requestId) {
+        SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+        try {
+
+            String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            String query2 = "UPDATE modifiedattendancerecords SET request_status = 'Rejected', date_modified = ?, time_modified = ? WHERE request_id = ?";
+            bridge.update(query2, currentDate, currentTime, requestId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -129,8 +145,7 @@ public class ModifiedDAO implements ModifiedRepository {
     modifiedDTOList.add (new ModifiedDTO ("REQ0011", "RECORD011", "SCAN0011", "EMP011", "2023 - 12 - 16", "09:20:00" ," 09:50:00", "2023-12-16", "Dấu thời gian không chính xác", "Accepted"));
     System.out.println("getAllModifiedDTOs() called!");
     return modifiedDTOList;
-}
-
+    }
 
 
 }

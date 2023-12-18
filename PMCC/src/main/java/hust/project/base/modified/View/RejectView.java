@@ -1,4 +1,7 @@
 package hust.project.base.modified.View;
+import hust.project.base.modified.Model.ModifiedDAO;
+import hust.project.base.modified.Model.ModifiedDTO;
+import hust.project.base.modified.Model.ModifiedRepository;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,7 +15,8 @@ import javafx.stage.Stage;
 import static hust.project.base.constants.MetricsConstants.APPLICATION_HEIGHT;
 import static hust.project.base.constants.MetricsConstants.APPLICATION_WIDTH;
 public class RejectView {
-    public void display() {
+    public void display(ModifiedDTO modifiedDTO){
+        ModifiedRepository modifiedRepository = new ModifiedDAO ();
         Stage stage = new Stage();
         Image icon = new Image(getClass().getResourceAsStream("/image/icon.png"));
         stage.getIcons().add(icon);
@@ -32,8 +36,9 @@ public class RejectView {
         confirmButton.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold;");
         Button cancelButton = new Button("Hủy bỏ");
         cancelButton.setStyle("-fx-background-color: #cccccc; -fx-text-fill: white; -fx-font-weight: bold;");
-        confirmButton.setOnAction(e -> {    // lambda expression
-            System.out.println("Chấp nhận");
+        confirmButton.setOnAction(e -> {
+            modifiedRepository.updateRejectModifiedStatus(modifiedDTO.getRequestId());// lambda expression
+            System.out.println("Từ chối thành công");
             stage.close();
         });
         cancelButton.setOnAction(e -> {    // lambda expression

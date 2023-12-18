@@ -5,8 +5,10 @@ import java.util.List;
 public interface ModifiedRepository {
     List<ModifiedDTO> getAllModifiedDTOs() ;
 
-    void updateModifiedStatus();
+    void updateAcceptModifiedStatus(String requestIdO);
 
     List<ModifiedDTO> getAllModifiedDTO();
+
+    void updateRejectModifiedStatus(String requestId);
 
 }

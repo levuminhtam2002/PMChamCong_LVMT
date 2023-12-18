@@ -23,7 +23,6 @@ import javafx.scene.shape.Rectangle;
 
 public class Header extends BorderPane {
     private TextField searchForm;
-
     public Header() {
         TextField searchForm = new TextField();
         searchForm.setPrefWidth(MAIN_WIDTH * 0.7 - 30); // Subtract the button width
@@ -44,9 +43,8 @@ public class Header extends BorderPane {
         VBox userInfo = new VBox();
         userInfo.setSpacing(5);
         userInfo.setAlignment(Pos.CENTER);
-
         Label label = new Label("Hello Admin!");
-        label.setStyle("-fx-font-size: 15px; -fx-text-fill: #000000");
+        label.setStyle("-fx-font-size: 15px; -fx-font-family: 'Arial'; -fx-text-fill: #000000");
         ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/image/image1.jpg")).toExternalForm()));
         imageView.setFitHeight(70);
         imageView.setFitWidth(70);
@@ -57,6 +55,4 @@ public class Header extends BorderPane {
         headerContainer.getChildren().addAll(searchForm, searchButton, userInfo);
         setLeft(headerContainer);
     }
-
-
 }

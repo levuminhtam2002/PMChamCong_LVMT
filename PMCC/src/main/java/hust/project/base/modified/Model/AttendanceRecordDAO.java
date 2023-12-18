@@ -6,7 +6,12 @@ import hust.project.base.utils.sql_hikari.DatabaseManager;
 import hust.project.base.utils.sql_hikari.SQLJavaBridge;
 import com.google.gson.JsonObject;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,15 +88,16 @@ public class AttendanceRecordDAO implements AttendanceRecordRepository{
             return records;
         }
 
-        public void updateAttendanceRecord(String recordId) {
-            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-            try {
-                String query = "UPDATE attendancerecords SET ... WHERE record_id = ?"; // Fill in the update details
-                bridge.update(query, recordId);
-            } catch (Exception e) {
-                e.printStackTrace ();
-            }
+    public void updateAttendanceRecord(String time, String recordId) {
+        SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+        try {
+            String query1 = "UPDATE attendancerecords SET time = ? WHERE record_id = ?";
+            bridge.update(query1, time,recordId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
         public void deleteAttendanceRecord(String recordId) {
             SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();

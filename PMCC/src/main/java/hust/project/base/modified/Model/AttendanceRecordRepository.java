@@ -9,7 +9,7 @@ public interface AttendanceRecordRepository {
 
     List<AttendanceRecordDTO> getAttendanceRecordByEmployeeId(String employeeId);
 
-    void updateAttendanceRecord(String recordId);
+    void updateAttendanceRecord(String time, String recordId);
 
     void deleteAttendanceRecord(String recordId);
 

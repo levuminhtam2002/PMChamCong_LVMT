@@ -1,4 +1,5 @@
 package hust.project.base.modified.View;
+import hust.project.base.modified.Model.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,7 +13,9 @@ import javafx.stage.Stage;
 import static hust.project.base.constants.MetricsConstants.APPLICATION_HEIGHT;
 import static hust.project.base.constants.MetricsConstants.APPLICATION_WIDTH;
 public class AcceptView {
-    public void display() {
+    public void display(ModifiedDTO modifiedDTO) {
+        AttendanceRecordRepository repository = new AttendanceRecordDAO ();
+        ModifiedRepository modifiedRepository = new ModifiedDAO ();
         Stage stage = new Stage();
         Image icon = new Image(getClass().getResourceAsStream("/image/icon.png"));
         stage.getIcons().add(icon);
@@ -33,6 +36,8 @@ public class AcceptView {
         Button cancelButton = new Button("Hủy bỏ");
         cancelButton.setStyle("-fx-background-color: #cccccc; -fx-text-fill: white; -fx-font-weight: bold;");
         confirmButton.setOnAction(e -> {    // lambda expression
+            repository.updateAttendanceRecord (modifiedDTO.getTime (), modifiedDTO.getRecordId ());
+            modifiedRepository.updateAcceptModifiedStatus (modifiedDTO.getRequestId());
             System.out.println("Chấp nhận yêu cầu thành công");
             stage.close();
         });
