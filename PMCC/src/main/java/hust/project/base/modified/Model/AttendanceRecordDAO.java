@@ -6,30 +6,14 @@ import hust.project.base.utils.sql_hikari.DatabaseManager;
 import hust.project.base.utils.sql_hikari.SQLJavaBridge;
 import com.google.gson.JsonObject;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
-
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AttendanceRecordDAO implements AttendanceRecordRepository{
-    private String convertDateFormat(String inputDate) {
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy:MM:dd");
-            java.util.Date date = inputFormat.parse(inputDate);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
-            return outputFormat.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
     public AttendanceRecordDTO getAttendanceRecordByRecordId(String recordId) {
         SQLJavaBridge bridge = null;
         try {
@@ -88,18 +72,6 @@ public class AttendanceRecordDAO implements AttendanceRecordRepository{
             return records;
         }
 
-
-    public boolean checkIfRecordExists(String requestId) {
-        SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-        try {
-            String query = "SELECT * FROM modifiedattendancerecords WHERE record_id = ?";
-            JsonObject json = bridge.queryOne(query, requestId);
-            return json != null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     public String generateNextRecordId() {
         SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();

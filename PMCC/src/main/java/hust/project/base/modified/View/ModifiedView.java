@@ -9,7 +9,6 @@ import hust.project.base.modified.Model.AttendanceRecordDAO;
 import hust.project.base.modified.Model.AttendanceRecordDTO;
 import hust.project.base.modified.Model.AttendanceRecordRepository;
 import hust.project.base.modified.Model.ModifiedDTO;
-import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -17,14 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
-
-
-
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import static hust.project.base.constants.MetricsConstants.APPLICATION_HEIGHT;
 import static hust.project.base.constants.MetricsConstants.APPLICATION_WIDTH;
 
@@ -49,13 +41,6 @@ public class ModifiedView {
 
     private TextField recordIdField;
 
-    private Employee employee;
-
-    private Department department;
-
-    private ComboBox<String> requestTypeComboBox;
-
-    private AttendanceRecordDTO record;
 
         public void display(ModifiedDTO data) {
 
@@ -93,7 +78,6 @@ public class ModifiedView {
         formLayout.add(new Label("Cơ quan"), 2, 5);
         formLayout.add(new Label("Ngày tạo"), 2, 6);
         layout.getChildren().add(formLayout);
-
         HBox buttonLayout = new HBox(30);
         buttonLayout.setAlignment(Pos.CENTER);
         Button acceptButton = new Button("CHẤP NHẬN");
@@ -105,8 +89,14 @@ public class ModifiedView {
         buttonLayout.getChildren().addAll(acceptButton, rejectButton, cancelButton);
         layout.getChildren().add(buttonLayout);
         adjustUIBasedOnStatus(data.getRequestStatus(), buttonLayout);
-        acceptButton.setOnAction(e -> handleAccept(data));
-        rejectButton.setOnAction(e -> handleReject(data));
+        acceptButton.setOnAction(e -> {
+            handleAccept(data);
+            window.close();
+        });
+        rejectButton.setOnAction(e -> {
+            handleReject(data);
+            window.close();
+        });
         cancelButton.setOnAction(e -> window.close());
         Scene scene = new Scene(layout, APPLICATION_WIDTH * 0.6, APPLICATION_HEIGHT * 0.7);
         window.setScene(scene);
@@ -122,7 +112,6 @@ public class ModifiedView {
             originalRecordField = new TextField(record.getTime ());
             scannerIdField = new TextField(record.getFingerscannerId());
             recordIdField = new TextField(record.getRecordId());
-
         } else {
             dateField = new TextField(data.getDate());
             originalRecordField = new TextField("");
@@ -213,6 +202,7 @@ public class ModifiedView {
     private void handleAccept(ModifiedDTO data) {
         AcceptView acceptView = new AcceptView();
         acceptView.display(data);
+
     }
 
     private void handleReject(ModifiedDTO data) {

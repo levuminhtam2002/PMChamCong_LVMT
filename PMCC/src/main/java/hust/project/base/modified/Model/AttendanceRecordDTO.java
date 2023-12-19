@@ -1,8 +1,5 @@
 package hust.project.base.modified.Model;
 
-import java.sql.Date;
-import java.sql.Time;
-
 public class AttendanceRecordDTO {
 
     private String recordId;

@@ -1,8 +1,5 @@
 package hust.project.base.modified.Model;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 public class ModifiedDTO {
     private String requestId;
     private String recordId;

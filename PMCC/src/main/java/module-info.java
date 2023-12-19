@@ -8,6 +8,10 @@ module hust.project.base {
     requires com.google.gson;
     requires org.slf4j;
 
+
+    // Open the package for JavaFX controllers
+    opens hust.project.base.modified to javafx.fxml;
+    exports hust.project.base.modified;
     opens hust.project.base to javafx.fxml;
     exports hust.project.base;
     exports hust.project.base.home;

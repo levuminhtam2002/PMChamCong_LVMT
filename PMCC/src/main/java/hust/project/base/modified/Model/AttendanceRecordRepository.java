@@ -13,9 +13,6 @@ public interface AttendanceRecordRepository {
 
     String generateNextRecordId();
 
-    boolean checkIfRecordExists(String requestId);
-
-
     void insertAttendanceRecord(AttendanceRecordDTO attendanceRecordDTO);
 
 }

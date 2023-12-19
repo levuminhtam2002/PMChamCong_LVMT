@@ -3,13 +3,11 @@ package hust.project.base.employee_subsystem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import hust.project.base.summary_logs.Summary;
 import hust.project.base.utils.sql_hikari.DatabaseManager;
 import hust.project.base.utils.sql_hikari.SQLJavaBridge;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class HRService implements IHRService {
     public Employee getEmployee(String employeeId) {

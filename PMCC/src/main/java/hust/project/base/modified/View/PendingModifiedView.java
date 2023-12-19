@@ -1,9 +1,5 @@
 package hust.project.base.modified.View;
-import hust.project.base.employee_subsystem.Employee;
-import hust.project.base.employee_subsystem.HRService;
 import hust.project.base.employee_subsystem.IHRService;
-import hust.project.base.modified.Model.AttendanceRecordDTO;
-import hust.project.base.modified.Model.AttendanceRecordRepository;
 import hust.project.base.modified.Model.ModifiedDTO;
 import hust.project.base.modified.Model.ModifiedRepository;
 import javafx.collections.FXCollections;
@@ -14,8 +10,6 @@ import javafx.scene.layout.VBox;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.util.Callback;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +20,8 @@ public class PendingModifiedView extends VBox  {
     private static ModifiedRepository modifiedRepository;
 
     private static PendingModifiedView ins;
+
+    private TableView<ModifiedDTO> requestTable;
     public static PendingModifiedView instance(){
         if(ins == null){
             ins = new PendingModifiedView(modifiedRepository);
@@ -49,7 +45,6 @@ public class PendingModifiedView extends VBox  {
             System.out.println("modifiedRepository is null!");
             return null;
         }
-//        List<ModifiedDTO> modifiedDTOList = modifiedRepository.getAllModifiedDTOs();
         List<ModifiedDTO> modifiedDTOList = modifiedRepository.getAllModifiedDTO();
         requestTable.setItems(FXCollections.observableArrayList(modifiedDTOList));
         requestTable.setEditable(true);
@@ -94,10 +89,8 @@ public class PendingModifiedView extends VBox  {
                         setText(null);
                         setStyle("");
                     } else {
-                        // Set text of cell to item
                         setText(item);
 
-                        // Set the color based on the text
                         if (item.equals("Accepted")) {
                             setStyle("-fx-text-fill: green;");
                         } else if (item.equals("Rejected")) {
@@ -118,12 +111,8 @@ public class PendingModifiedView extends VBox  {
         requestTable.getColumns().addAll(sttCol, employeeIdCol, timeCol,dateCol,requestReasonCol, requestStatusCol, timeModifiedCol, dateModifiedCol,  actionCol);
         requestTable.setPrefHeight(25 * 18);
         requestTable.setItems(FXCollections.observableArrayList(modifiedDTOList));
-
-
         return requestTable;
     }
-
-
         Callback<TableColumn<ModifiedDTO, Void>, TableCell<ModifiedDTO, Void>> cellFactory = new Callback<>() {
         @Override
         public TableCell<ModifiedDTO, Void> call(final TableColumn<ModifiedDTO, Void> param) {
@@ -140,7 +129,6 @@ public class PendingModifiedView extends VBox  {
                         openModidiedView(data);
                     });
                 }
-
                 {
                     btn.setOnAction((ActionEvent event) -> {
                         ModifiedDTO data = getTableView().getItems().get(getIndex());
@@ -160,29 +148,10 @@ public class PendingModifiedView extends VBox  {
             return cell;
         }
     };
-//    @Override
-//    public void performSearch(String searchText) {
-//        filterTable(searchText);
-//    }
-//    public void filterTable(String searchText) {
-//        if (attendanceRecordRepository == null) {
-//            System.out.println("attendanceRecordRepository is null!");
-//            return; // or handle the null scenario appropriately
-//        }
-//
-//        List<ModifiedDTO> filteredList = attendanceRecordRepository.getAllModifiedDTOs().stream()
-//                .filter(dto -> dto.getEmployeeId().contains(searchText) || dto.getRecordId().contains(searchText))
-//                .collect(Collectors.toList());
-//
-//        requestTable.setItems(FXCollections.observableArrayList(filteredList));
-//    }
 
     private void openModidiedView(ModifiedDTO data) {
         ModifiedView modifiedView = new ModifiedView();
         modifiedView.display(data);
-    }
-    public List<AttendanceRecordDTO> getAttendanceRecordDTOs(){
-        return new ArrayList<>();
     }
 
 }

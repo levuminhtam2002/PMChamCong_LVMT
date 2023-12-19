@@ -1,25 +1,19 @@
 package hust.project.base.header;
 
+import hust.project.base.modified.View.PendingModifiedView;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.shape.Line;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+
 import java.util.Objects;
 
 import static hust.project.base.constants.MetricsConstants.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class Header extends BorderPane {
     private TextField searchForm;
@@ -38,8 +32,14 @@ public class Header extends BorderPane {
         searchIcon.setFitWidth(20);
         searchButton.setGraphic(searchIcon);
         searchButton.setOnAction(e -> {
-            System.out.println("Searching ...");
+//            String searchText = searchForm.getText().trim();
+//            if (!searchText.isEmpty()) {
+//                PendingModifiedView.instance().filterTable(searchText);
+//                System.out.println("Tra cuu");
+//            }
+            System.out.println("Tra cuu");
         });
+
         VBox userInfo = new VBox();
         userInfo.setSpacing(5);
         userInfo.setAlignment(Pos.CENTER);

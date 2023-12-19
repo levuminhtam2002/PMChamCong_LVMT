@@ -5,14 +5,11 @@ import hust.project.base.dashboard.Dashboard;
 import hust.project.base.home.HomeController;
 import hust.project.base.modified.Model.ModifiedDAO;
 
-import hust.project.base.modified.Model.AttendanceRecordRepository;
 import hust.project.base.modified.Model.ModifiedRepository;
 import hust.project.base.summary_logs.SummaryDepartmentController;
 import hust.project.base.summary_logs.SummaryDepartmentView;
 import hust.project.base.modified.View.PendingModifiedView;
 import hust.project.base.modified.ModifiedController;
-
-import java.util.List;
 
 public class NavBarController {
     private final Navbar navbar = Navbar.instance();

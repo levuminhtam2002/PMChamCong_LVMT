@@ -4,13 +4,9 @@ import hust.project.base.header.SearchCallBack;
 import hust.project.base.navbar.NavBarController;
 import hust.project.base.header.Header;
 import hust.project.base.navbar.Navbar;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
-import javafx.scene.control.TableView;
-import javafx.stage.Stage;
 
 import static hust.project.base.constants.MetricsConstants.*;
 
