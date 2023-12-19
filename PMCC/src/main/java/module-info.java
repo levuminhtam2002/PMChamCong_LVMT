@@ -10,9 +10,9 @@ module hust.project.base {
 
 
     // Open the package for JavaFX controllers
-    opens hust.project.base.modified to javafx.fxml;
-    exports hust.project.base.modified;
-    opens hust.project.base to javafx.fxml;
+//    opens hust.project.base.modified to javafx.fxml;
+    exports hust.project.base.modified.View;
+    opens hust.project.base.modified.View to javafx.fxml;
     exports hust.project.base;
     exports hust.project.base.home;
     opens hust.project.base.home to javafx.fxml;
@@ -23,4 +23,6 @@ module hust.project.base {
     exports hust.project.base.header;
     opens hust.project.base.header to javafx.fxml;
     opens hust.project.base.modified.Model to javafx.base;
+    exports hust.project.base.modified.Controller;
+    opens hust.project.base.modified.Controller to javafx.fxml;
 }

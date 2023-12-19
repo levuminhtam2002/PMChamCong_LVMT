@@ -5,11 +5,12 @@ import hust.project.base.dashboard.Dashboard;
 import hust.project.base.home.HomeController;
 import hust.project.base.modified.Model.ModifiedDAO;
 
+import hust.project.base.modified.Model.ModifiedDTO;
 import hust.project.base.modified.Model.ModifiedRepository;
 import hust.project.base.summary_logs.SummaryDepartmentController;
 import hust.project.base.summary_logs.SummaryDepartmentView;
 import hust.project.base.modified.View.PendingModifiedView;
-import hust.project.base.modified.ModifiedController;
+import hust.project.base.modified.Controller.PendingModifiedController;
 
 public class NavBarController {
     private final Navbar navbar = Navbar.instance();
@@ -50,20 +51,16 @@ public class NavBarController {
                         System.out.println("navigated to Detail!");
                         break;
                     case MODIFIED_SCREEN:
-//                        AttendanceRecordRepository repository = new ModifiedDAO();
                         ModifiedRepository repository = new ModifiedDAO();
-                        PendingModifiedView modifiedView = new PendingModifiedView(repository);
-                        new ModifiedController(modifiedView);
+                        PendingModifiedView modifiedView = PendingModifiedView.instance(); // Use the instance method if it's a singleton
+                        new PendingModifiedController(modifiedView, repository);
                         HomeController.instance().changeScreen(modifiedView);
-                        System.out.println("navigated to Modified!");
+                        System.out.println("Navigated to Modified!");
                         break;
+
                 }
             }
 
-            @Override
-            public void navigate(String name, Object data) {
-
-            }
         };
         navbar.setNavbarAction(navbarAction);
     }
