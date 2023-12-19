@@ -11,4 +11,6 @@ public interface ModifiedRepository {
 
     void updateRejectModifiedStatus(String requestId);
 
+    void updateAcceptModifiedRecordId(String requestId, String recordId);
+
 }

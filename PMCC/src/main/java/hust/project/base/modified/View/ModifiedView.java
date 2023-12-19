@@ -45,15 +45,19 @@ public class ModifiedView {
     private TextField createdDateField;
     private TextField scannerIdField;
 
+    private TextField requestTypeField;
+
+    private TextField recordIdField;
+
+    private Employee employee;
+
+    private Department department;
+
     private ComboBox<String> requestTypeComboBox;
 
-    public void display(ModifiedDTO data) {
+    private AttendanceRecordDTO record;
 
-        AttendanceRecordRepository repository = new AttendanceRecordDAO ();
-        AttendanceRecordDTO record = repository.getAttendanceRecordByRecordId(data.getRecordId());
-        Employee employee = hrService.getEmployee(data.getEmployeeId());
-        Department department = hrService.getDepartment(employee.getDepartmentId());
-
+        public void display(ModifiedDTO data) {
 
         Stage window = new Stage();
         Image icon = new Image(getClass().getResourceAsStream("/image/icon.png"));
@@ -61,7 +65,7 @@ public class ModifiedView {
         window.setTitle("Chi tiết yêu cầu");
         window.initModality(Modality.APPLICATION_MODAL);
 
-        VBox layout = new VBox(10);
+        VBox layout = new VBox(25);
         layout.setStyle("-fx-background-color: white; -fx-padding: 30; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;");
         layout.setAlignment(Pos.TOP_CENTER);
 
@@ -70,10 +74,9 @@ public class ModifiedView {
         layout.getChildren().add(titleLabel);
 
         GridPane formLayout = new GridPane();
-        formLayout.setVgap(10);
-        formLayout.setHgap(10);
-
-        initializeFormFields(data, employee, department, record);
+        formLayout.setVgap(15);
+        formLayout.setHgap(25);
+        initializeFormFields(data);
         addFormFieldsToGridPane(formLayout);
         formLayout.add(new Label("Họ và tên"), 0, 0);
         formLayout.add(new Label("Mã nhân viên"), 0, 1);
@@ -81,6 +84,7 @@ public class ModifiedView {
         formLayout.add(new Label("Ngày"), 0, 3);
         formLayout.add(new Label("Ghi chú"), 0, 4);
         formLayout.add(new Label("Id máy quét"), 0, 5);
+        formLayout.add(new Label("Id bản ghi"), 0, 6);
         formLayout.add(new Label("Loại yêu cầu"), 2, 0);
         formLayout.add(new Label("Mã yêu cầu"), 2, 1);
         formLayout.add(new Label("Bản ghi gốc"), 2, 2);
@@ -89,7 +93,8 @@ public class ModifiedView {
         formLayout.add(new Label("Cơ quan"), 2, 5);
         formLayout.add(new Label("Ngày tạo"), 2, 6);
         layout.getChildren().add(formLayout);
-        HBox buttonLayout = new HBox(20);
+
+        HBox buttonLayout = new HBox(30);
         buttonLayout.setAlignment(Pos.CENTER);
         Button acceptButton = new Button("CHẤP NHẬN");
         acceptButton.setStyle("-fx-background-color: green; -fx-text-fill: white;");
@@ -103,42 +108,43 @@ public class ModifiedView {
         acceptButton.setOnAction(e -> handleAccept(data));
         rejectButton.setOnAction(e -> handleReject(data));
         cancelButton.setOnAction(e -> window.close());
-
-        Scene scene = new Scene(layout, APPLICATION_WIDTH * 0.6, APPLICATION_HEIGHT * 0.6);
+        Scene scene = new Scene(layout, APPLICATION_WIDTH * 0.6, APPLICATION_HEIGHT * 0.7);
         window.setScene(scene);
         window.showAndWait();
     }
 
-private void initializeFormFields(ModifiedDTO data, Employee employee, Department department, AttendanceRecordDTO record){
-    nameField = new TextField(employee.getName ()); // Assuming you have a method to get employee name
-    employeeIdField = new TextField(data.getEmployeeId());
-    departmentNameField = new TextField (department.getDepartmentName ());
-    approverField = new TextField("Lê Vũ Minh Tâm"); // You'll need to fetch approver data
-    dateField = new TextField(record.getDate());
-    noteField = new TextField(data.getRequestReason());
-    requestIdField = new TextField(data.getRequestId());
-    originalRecordField = new TextField(record.getTime ()); // Assuming you have a method to format original record
-    modifiedRecordField = new TextField(data.getTime()); // Assuming you have a method to format modified record
-    statusField = new TextField(data.getRequestStatus());
-    createdDateField = new TextField( String.valueOf (LocalDate.now())); // You'll need to fetch creation date
-    scannerIdField = new TextField(record.getFingerscannerId ());
-    requestTypeComboBox = new ComboBox<>();
-    requestTypeComboBox.setItems(FXCollections.observableArrayList(
-            "Chỉnh sửa chấm công", // Edit Attendance
-            "Thêm chấm công",      // Add Attendance
-            "Xóa chấm công"        // Delete Attendance
-    ));
-    requestTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-        if ("Thêm chấm công".equals(newVal)) {
-            clearAndEnableTextFields();
-            enableTextColor();
-        } else if ("Chỉnh sửa chấm công".equals(newVal)) {
-            disableTextFields();
-            disableTextColor();
+    private void initializeFormFields(ModifiedDTO data){
+        AttendanceRecordDTO record;
+        AttendanceRecordRepository repository = new AttendanceRecordDAO();
+        if (!data.getRecordId().equals ("******")) {
+            record = repository.getAttendanceRecordByRecordId(data.getRecordId());
+            dateField = new TextField(record.getDate());
+            originalRecordField = new TextField(record.getTime ());
+            scannerIdField = new TextField(record.getFingerscannerId());
+            recordIdField = new TextField(record.getRecordId());
+
+        } else {
+            dateField = new TextField(data.getDate());
+            originalRecordField = new TextField("");
+            scannerIdField = new TextField("");
+            recordIdField = new TextField("");
+            System.out.println("recordId is null!");
         }
-    });
-    disableTextFields();
-}
+        Employee employee = hrService.getEmployee(data.getEmployeeId());
+        Department department = hrService.getDepartment(employee.getDepartmentId());
+        nameField = new TextField(employee.getName ()); // Assuming you have a method to get employee name
+        employeeIdField = new TextField(data.getEmployeeId());
+        departmentNameField = new TextField (department.getDepartmentName ());
+        approverField = new TextField("Lê Vũ Minh Tâm");
+        noteField = new TextField(data.getRequestReason());
+        requestIdField = new TextField(data.getRequestId());
+        modifiedRecordField = new TextField(data.getTime());
+        statusField = new TextField(data.getRequestStatus());
+        createdDateField = new TextField( String.valueOf (LocalDate.now()));
+        requestTypeField = new TextField(data.getRequestType());
+        disableTextFields();
+    }
+
 
     private void addFormFieldsToGridPane(GridPane formLayout) {
         formLayout.add(nameField, 1, 0);
@@ -147,49 +153,27 @@ private void initializeFormFields(ModifiedDTO data, Employee employee, Departmen
         formLayout.add(dateField, 1, 3);
         formLayout.add(noteField, 1, 4);
         formLayout.add(scannerIdField, 1, 5);
-        formLayout.add(requestTypeComboBox, 3, 0);
+        formLayout.add(recordIdField, 1, 6);
+        formLayout.add(requestTypeField, 3, 0);
         formLayout.add(requestIdField, 3, 1);
         formLayout.add(originalRecordField, 3, 2);
         formLayout.add(modifiedRecordField, 3, 3);
         formLayout.add(statusField, 3, 4);
         formLayout.add(departmentNameField, 3, 5);
         formLayout.add(createdDateField, 3, 6);
+
     }
 
-    private void clearAndEnableTextFields() {
-        nameField.clear();
-        nameField.setEditable(true);
-        employeeIdField.clear();
-        employeeIdField.setEditable(true);
-        departmentNameField.clear();
-        departmentNameField.setEditable(true);
-        approverField.clear();
-        approverField.setEditable(true);
-        dateField.clear();
-        dateField.setEditable(true);
-        noteField.clear();
-        noteField.setEditable(true);
-        requestIdField.clear();
-        requestIdField.setEditable(true);
-        originalRecordField.clear();
-        originalRecordField.setEditable(true);
-        modifiedRecordField.clear();
-        modifiedRecordField.setEditable(true);
-        statusField.clear();
-        statusField.setEditable(true);
-        createdDateField.clear();
-        createdDateField.setEditable(true);
-        scannerIdField.clear();
-        scannerIdField.setEditable(true);
-    }
 
     private void disableTextFields() {
         nameField.setEditable(false);
         employeeIdField.setEditable(false);
         departmentNameField.setEditable(false);
+        requestTypeField.setEditable(false);
         approverField.setEditable(false);
         dateField.setEditable(false);
         noteField.setEditable(false);
+        recordIdField.setEditable(false);
         requestIdField.setEditable(false);
         originalRecordField.setEditable(false);
         modifiedRecordField.setEditable(false);
@@ -199,36 +183,26 @@ private void initializeFormFields(ModifiedDTO data, Employee employee, Departmen
     }
 //    ĐỂ BACKGROUND COLOR CỦA TEXTFIELD FALSE ENITABLE LÀ MÀU XÁM
     private void disableTextColor(){
-        nameField.setStyle("-fx-background-color: #DDDDDD");
-        employeeIdField.setStyle("-fx-background-color: #DDDDDD");
-        departmentNameField.setStyle("-fx-background-color: #DDDDDD");
-        approverField.setStyle("-fx-background-color: #DDDDDD");
-        dateField.setStyle("-fx-background-color: #DDDDDD");
-        noteField.setStyle("-fx-background-color: #DDDDDD");
-        requestIdField.setStyle("-fx-background-color: #DDDDDD");
-        originalRecordField.setStyle("-fx-background-color: #DDDDDD");
-        modifiedRecordField.setStyle("-fx-background-color: #DDDDDD");
-        statusField.setStyle("-fx-background-color: #DDDDDD");
-        createdDateField.setStyle("-fx-background-color: #DDDDDD");
-        scannerIdField.setStyle("-fx-background-color: #DDDDDD");
+        nameField.setStyle("-fx-background-color: #E8E8E8");
+        employeeIdField.setStyle("-fx-background-color: #E8E8E8");
+        departmentNameField.setStyle("-fx-background-color: #E8E8E8");
+        requestTypeField.setStyle("-fx-background-color: #E8E8E8");
+        approverField.setStyle("-fx-background-color: #E8E8E8");
+        recordIdField.setStyle("-fx-background-color: #E8E8E8");
+        dateField.setStyle("-fx-background-color: #E8E8E8");
+        noteField.setStyle("-fx-background-color: #E8E8E8");
+        requestIdField.setStyle("-fx-background-color: #E8E8E8");
+        originalRecordField.setStyle("-fx-background-color: #E8E8E8");
+        modifiedRecordField.setStyle("-fx-background-color: #E8E8E8");
+        statusField.setStyle("-fx-background-color: #E8E8E8");
+        createdDateField.setStyle("-fx-background-color: #E8E8E8");
+        scannerIdField.setStyle("-fx-background-color: #E8E8E8");
     }
-    private void enableTextColor(){
-        nameField.setStyle("-fx-background-color: white");
-        employeeIdField.setStyle("-fx-background-color: white");
-        departmentNameField.setStyle("-fx-background-color: white");
-        approverField.setStyle("-fx-background-color: white");
-        dateField.setStyle("-fx-background-color: white");
-        noteField.setStyle("-fx-background-color: white");
-        requestIdField.setStyle("-fx-background-color: white");
-        originalRecordField.setStyle("-fx-background-color: white");
-        modifiedRecordField.setStyle("-fx-background-color: white");
-        statusField.setStyle("-fx-background-color: white");
-        createdDateField.setStyle("-fx-background-color: white");
-        scannerIdField.setStyle("-fx-background-color: white");
-    }
-    private void adjustUIBasedOnStatus(String status, HBox buttonLayout){
+     private void adjustUIBasedOnStatus(String status, HBox buttonLayout){
         if ("Accepted".equals(status) || "Rejected".equals(status)) {
             buttonLayout.setVisible(false); // Hide buttons
+            disableTextFields();
+            disableTextColor();
         }
         if ("Pending".equals(status)) {
             disableTextFields();

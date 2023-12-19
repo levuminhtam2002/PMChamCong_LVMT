@@ -16,13 +16,6 @@ public class DatabaseManager {
         return ins;
     }
     public void init() {
-//        String jdbcURL = "jdbc:mariadb://127.0.0.1:3306/timekeeper";
-//        String user = "root";
-//        String password = "1234";
-//        String database = "timekeeper";
-//        public static final String URL = "jdbc:mysql://localhost:3306/pmcc";
-//        public static final String USERNAME = "root";
-//        public static final String PASSWORD = "123456";
         String jdbcURL = "jdbc:mysql://localhost:3306/pmchamcong";
         String user = "root";
         String password = "123456";

@@ -88,34 +88,56 @@ public class AttendanceRecordDAO implements AttendanceRecordRepository{
             return records;
         }
 
-    public void updateAttendanceRecord(String time, String recordId) {
+
+    public boolean checkIfRecordExists(String requestId) {
         SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
         try {
-            String query1 = "UPDATE attendancerecords SET time = ? WHERE record_id = ?";
-            bridge.update(query1, time,recordId);
+            String query = "SELECT * FROM modifiedattendancerecords WHERE record_id = ?";
+            JsonObject json = bridge.queryOne(query, requestId);
+            return json != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    public String generateNextRecordId() {
+        SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+        try {
+            String query = "SELECT record_id FROM attendancerecords ORDER BY record_id DESC LIMIT 1";
+            JsonObject json = bridge.queryOne(query);
+            if (json != null) {
+                String lastId = json.get("record_id").getAsString();
+                int num = Integer.parseInt(lastId.substring(6)) + 1;
+                return "RECORD" + String.format("%03d", num);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "0"; // Default value if no records are found or in case of error
+    }
+
+    public  void updateAttendanceRecord(String time, String recordId) {
+        SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+        try {
+            String query = "UPDATE attendancerecords SET time = ? WHERE record_id = ?";
+            bridge.update(query, time, recordId);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-        public void deleteAttendanceRecord(String recordId) {
-            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-            try {
-                String query = "DELETE FROM attendancerecords WHERE record_id = ?";
-                bridge.update(query, recordId);
-            } catch (Exception e) {
-                e.printStackTrace ();
-            }
+    public void insertAttendanceRecord(AttendanceRecordDTO attendanceRecordDTO) {
+        SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
+        try {
+            String query = "INSERT INTO attendancerecords (record_id, employee_id, fingerscanner_id, date, time) VALUES (?, ?, ?, ?, ?)";
+            bridge.update(query, attendanceRecordDTO.getRecordId(), attendanceRecordDTO.getEmployeeId(), attendanceRecordDTO.getFingerscannerId () , attendanceRecordDTO.getDate(), attendanceRecordDTO.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
-        public void insertAttendanceRecord(AttendanceRecordDTO attendanceRecordDTO) {
-            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-            try {
-                String query = "INSERT INTO attendancerecords (record_id, employee_id, fingerscanner_id, date, time) VALUES (?, ?, ?, ?, ?)";
-                bridge.update(query, attendanceRecordDTO.getRecordId(), attendanceRecordDTO.getEmployeeId(), attendanceRecordDTO.getFingerscannerId(), attendanceRecordDTO.getDate(), attendanceRecordDTO.getTime());
-            } catch (Exception e) {
-               e.printStackTrace ();
-            }
-        }
+
+
+
 }

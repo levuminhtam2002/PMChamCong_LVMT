@@ -15,8 +15,10 @@ public class ModifiedDTO {
     private String requestReason;
     private String requestStatus;
 
+    private String requestType;
+
     // Constructor
-    public ModifiedDTO(String requestId, String recordId, String scanId, String employeeId, String date, String time, String timeModified, String dateModified, String requestReason, String requestStatus) {
+    public ModifiedDTO(String requestId, String recordId, String scanId, String employeeId, String date, String time, String timeModified, String dateModified, String requestReason, String requestStatus, String requestType) {
         this.requestId = requestId;
         this.recordId = recordId;
         this.scanId = scanId;
@@ -27,6 +29,7 @@ public class ModifiedDTO {
         this.dateModified = dateModified;
         this.requestReason = requestReason;
         this.requestStatus = requestStatus;
+        this.requestType = requestType;
     }
 
     public String getRecordId() {
@@ -87,6 +90,13 @@ public class ModifiedDTO {
     }
     public void setRequestStatus(String requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    public String getRequestType() {
+        return requestType;
+    }
+    public void setRequestType(String requestType) {
+        this.requestType = requestType;
     }
 
 }

@@ -49,8 +49,6 @@ public class PendingModifiedView extends VBox  {
             System.out.println("modifiedRepository is null!");
             return null;
         }
-
-
 //        List<ModifiedDTO> modifiedDTOList = modifiedRepository.getAllModifiedDTOs();
         List<ModifiedDTO> modifiedDTOList = modifiedRepository.getAllModifiedDTO();
         requestTable.setItems(FXCollections.observableArrayList(modifiedDTOList));
@@ -62,12 +60,7 @@ public class PendingModifiedView extends VBox  {
         });
         TableColumn<ModifiedDTO, Number> sttCol = new TableColumn<>("STT");
         sttCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper<>(requestTable.getItems().indexOf(column.getValue()) + 1));
-//        TableColumn<ModifiedDTO, String> requestIdCol = new TableColumn<>("Mã yêu cầu");
-//        requestIdCol.setCellValueFactory(new PropertyValueFactory<>("requestId"));
-//        TableColumn<ModifiedDTO, String> recordIdCol = new TableColumn<>("Mã hồ sơ");
-//        recordIdCol.setCellValueFactory(new PropertyValueFactory<>("recordId"));//
-//        TableColumn<ModifiedDTO, String> scanIdCol = new TableColumn<>("Mã quét");
-//        scanIdCol.setCellValueFactory(new PropertyValueFactory<>("scanId"));//
+
         TableColumn<ModifiedDTO, String> employeeIdCol = new TableColumn<>("Nhân viên");
         employeeIdCol.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
 
@@ -124,7 +117,6 @@ public class PendingModifiedView extends VBox  {
         actionCol.setCellFactory(cellFactory);
         requestTable.getColumns().addAll(sttCol, employeeIdCol, timeCol,dateCol,requestReasonCol, requestStatusCol, timeModifiedCol, dateModifiedCol,  actionCol);
         requestTable.setPrefHeight(25 * 18);
-
         requestTable.setItems(FXCollections.observableArrayList(modifiedDTOList));
 
 
@@ -132,10 +124,7 @@ public class PendingModifiedView extends VBox  {
     }
 
 
-    public List<ModifiedDTO> getModifiedDTOs(){
-        return new ArrayList<>();
-    }
-    Callback<TableColumn<ModifiedDTO, Void>, TableCell<ModifiedDTO, Void>> cellFactory = new Callback<>() {
+        Callback<TableColumn<ModifiedDTO, Void>, TableCell<ModifiedDTO, Void>> cellFactory = new Callback<>() {
         @Override
         public TableCell<ModifiedDTO, Void> call(final TableColumn<ModifiedDTO, Void> param) {
             final TableCell<ModifiedDTO, Void> cell = new TableCell<>() {

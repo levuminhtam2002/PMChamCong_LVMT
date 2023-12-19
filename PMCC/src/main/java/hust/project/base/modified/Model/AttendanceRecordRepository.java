@@ -11,7 +11,10 @@ public interface AttendanceRecordRepository {
 
     void updateAttendanceRecord(String time, String recordId);
 
-    void deleteAttendanceRecord(String recordId);
+    String generateNextRecordId();
+
+    boolean checkIfRecordExists(String requestId);
+
 
     void insertAttendanceRecord(AttendanceRecordDTO attendanceRecordDTO);
 

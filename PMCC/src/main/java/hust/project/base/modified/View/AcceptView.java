@@ -13,9 +13,9 @@ import javafx.stage.Stage;
 import static hust.project.base.constants.MetricsConstants.APPLICATION_HEIGHT;
 import static hust.project.base.constants.MetricsConstants.APPLICATION_WIDTH;
 public class AcceptView {
+    AttendanceRecordRepository repository = new AttendanceRecordDAO ();
+    ModifiedRepository modifiedRepository = new ModifiedDAO ();
     public void display(ModifiedDTO modifiedDTO) {
-        AttendanceRecordRepository repository = new AttendanceRecordDAO ();
-        ModifiedRepository modifiedRepository = new ModifiedDAO ();
         Stage stage = new Stage();
         Image icon = new Image(getClass().getResourceAsStream("/image/icon.png"));
         stage.getIcons().add(icon);
@@ -35,9 +35,23 @@ public class AcceptView {
         confirmButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-weight: bold;");
         Button cancelButton = new Button("Hủy bỏ");
         cancelButton.setStyle("-fx-background-color: #cccccc; -fx-text-fill: white; -fx-font-weight: bold;");
-        confirmButton.setOnAction(e -> {    // lambda expression
-            repository.updateAttendanceRecord (modifiedDTO.getTime (), modifiedDTO.getRecordId ());
-            modifiedRepository.updateAcceptModifiedStatus (modifiedDTO.getRequestId());
+        confirmButton.setOnAction(e -> {
+            if ("Chỉnh sửa chấm công".equals(modifiedDTO.getRequestType())) {
+                    repository.updateAttendanceRecord(modifiedDTO.getTime (),modifiedDTO.getRecordId());
+                    modifiedRepository.updateAcceptModifiedStatus (modifiedDTO.getRequestId());
+
+            } else if ("Thêm chấm công".equals(modifiedDTO.getRequestType ())) {
+                String newRecordId = repository.generateNextRecordId();
+                AttendanceRecordDTO attendanceRecordDTO = new AttendanceRecordDTO();
+                attendanceRecordDTO.setRecordId(newRecordId);
+                attendanceRecordDTO.setFingerscannerId("0");
+                attendanceRecordDTO.setDate(modifiedDTO.getDate ());
+                attendanceRecordDTO.setEmployeeId (modifiedDTO.getEmployeeId ());
+                attendanceRecordDTO.setTime (modifiedDTO.getTime ());// Set scanId to null
+                repository.insertAttendanceRecord(attendanceRecordDTO);
+                modifiedRepository.updateAcceptModifiedRecordId(modifiedDTO.getRequestId(), newRecordId);
+            }
+
             System.out.println("Chấp nhận yêu cầu thành công");
             stage.close();
         });
@@ -50,4 +64,6 @@ public class AcceptView {
         stage.setScene(new Scene(layout, APPLICATION_WIDTH*0.3, APPLICATION_HEIGHT*0.3));
         stage.show();
     }
+
+
 }
