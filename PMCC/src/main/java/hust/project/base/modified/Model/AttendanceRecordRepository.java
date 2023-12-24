@@ -4,15 +4,15 @@ import java.util.List;
 
 public interface AttendanceRecordRepository {
 
-    AttendanceRecordDTO getAttendanceRecordByRecordId(String recordId);
-    List<AttendanceRecordDTO> getAllAttendanceRecord();
+    AttendanceRecord getAttendanceRecordByRecordId(String recordId);
+    List<AttendanceRecord> getAllAttendanceRecord();
 
-    List<AttendanceRecordDTO> getAttendanceRecordByEmployeeId(String employeeId);
+    List<AttendanceRecord> getAttendanceRecordByEmployeeId(String employeeId);
 
     void updateAttendanceRecord(String time, String recordId);
 
     String generateNextRecordId();
 
-    void insertAttendanceRecord(AttendanceRecordDTO attendanceRecordDTO);
+    void insertAttendanceRecord(AttendanceRecord attendanceRecordDTO);
 
 }

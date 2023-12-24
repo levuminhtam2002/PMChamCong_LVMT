@@ -1,6 +1,6 @@
 package hust.project.base.modified.Model;
 
-public class AttendanceRecordDTO {
+public class AttendanceRecord {
 
     private String recordId;
     private String employeeId;
@@ -8,7 +8,7 @@ public class AttendanceRecordDTO {
     private String date;
     private String time;
 
-    public AttendanceRecordDTO(String recordId, String employeeId, String fingerscannerId, String date, String time) {
+    public AttendanceRecord(String recordId, String employeeId, String fingerscannerId, String date, String time) {
         this.recordId = recordId;
         this.employeeId = employeeId;
         this.fingerscannerId = fingerscannerId;
@@ -16,7 +16,7 @@ public class AttendanceRecordDTO {
         this.time = time;
     }
 
-    public AttendanceRecordDTO() {
+    public AttendanceRecord() {
     }
     public String getRecordId() {
         return recordId;

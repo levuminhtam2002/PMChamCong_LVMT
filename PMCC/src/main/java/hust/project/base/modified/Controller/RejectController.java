@@ -1,6 +1,6 @@
 package hust.project.base.modified.Controller;
 
-import hust.project.base.modified.Model.ModifiedDTO;
+import hust.project.base.modified.Model.ModifiedRecord;
 import hust.project.base.modified.Model.ModifiedRepository;
 import hust.project.base.modified.View.RejectView;
 
@@ -19,7 +19,7 @@ public class RejectController {
         view.setOnCancelAction(this::cancelAcceptance);
     }
 
-    private void confirmRejection(ModifiedDTO modifiedDTO) {
+    private void confirmRejection(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
             modifiedRepo.updateRejectModifiedStatus(modifiedDTO.getRequestId());
             System.out.println("Từ chối thành công");
@@ -27,7 +27,7 @@ public class RejectController {
         }
     }
 
-    private void cancelAcceptance(ModifiedDTO modifiedDTO) {
+    private void cancelAcceptance(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
             System.out.println("Hủy ");
             view.close();

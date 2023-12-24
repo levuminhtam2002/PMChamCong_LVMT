@@ -1,7 +1,7 @@
 package hust.project.base.modified.Controller;
 
 import hust.project.base.modified.Model.AttendanceRecordRepository;
-import hust.project.base.modified.Model.ModifiedDTO;
+import hust.project.base.modified.Model.ModifiedRecord;
 import hust.project.base.modified.Model.ModifiedRepository;
 import hust.project.base.modified.View.AcceptView;
 import hust.project.base.modified.View.ModifiedView;
@@ -11,7 +11,6 @@ import hust.project.base.modified.View.RejectView;
 public class ModifiedController{
     private ModifiedView view;
     private ModifiedRepository modifiedRepository;
-
     private AttendanceRecordRepository attendanceRecordRepository;
 
     public ModifiedController(ModifiedView view, ModifiedRepository modifiedRepository, AttendanceRecordRepository attendanceRecordRepository) {
@@ -26,7 +25,7 @@ public class ModifiedController{
         view.setOnRejectAction(this::handleReject);
         view.setOnCancelAction(this::handleCancel);
     }
-    private void handleAccept(ModifiedDTO data) {
+    private void handleAccept(ModifiedRecord data) {
         if (data != null) {
             AcceptView acceptView = new AcceptView();
             view.close ();
@@ -36,7 +35,7 @@ public class ModifiedController{
         }
     }
 
-    private void handleReject(ModifiedDTO data) {
+    private void handleReject(ModifiedRecord data) {
         if (data != null) {
             RejectView rejectView = new RejectView ();
             view.close ();
@@ -44,7 +43,7 @@ public class ModifiedController{
             rejectView.display(data);
         }
     }
-    private void handleCancel (ModifiedDTO data){
+    private void handleCancel (ModifiedRecord data){
             view.close ();
     }
 

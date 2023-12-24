@@ -3,29 +3,29 @@ package hust.project.base.home;
 import hust.project.base.header.SearchCallBack;
 import hust.project.base.navbar.NavBarController;
 import hust.project.base.header.Header;
-import hust.project.base.navbar.Navbar;
+import hust.project.base.navbar.NavbarView;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
 
 import static hust.project.base.constants.MetricsConstants.*;
 
-public class Home extends HBox {
+public class HomeView extends HBox {
     private SearchCallBack searchCallBack;
     private Pane currentScreen;
     VBox vboxMain ;
-    private static Home ins;
-    public static Home instance(){
+    private static HomeView ins;
+    public static HomeView instance(){
         if(ins == null){
-            ins = new Home();
+            ins = new HomeView ();
         }
         return ins;
     }
 
-    private Home(){
+    private HomeView(){
         setStyle("-fx-background-color : " + BG_COLOR_MAIN);
         NavBarController.instance().init();
-        Navbar navbar = Navbar.instance();
+        NavbarView navbar = NavbarView.instance();
         getChildren().add(navbar);
         getChildren().add(Main());
     }

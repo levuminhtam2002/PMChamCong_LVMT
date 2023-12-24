@@ -6,7 +6,7 @@ public interface ModifiedRepository {
 
     void updateAcceptModifiedStatus(String requestIdO);
 
-    List<ModifiedDTO> getAllModifiedDTO();
+    List<ModifiedRecord> getAllModifiedDTO();
 
     void updateRejectModifiedStatus(String requestId);
 

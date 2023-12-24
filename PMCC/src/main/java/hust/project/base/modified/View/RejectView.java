@@ -1,11 +1,12 @@
 package hust.project.base.modified.View;
 
-import hust.project.base.modified.Model.ModifiedDTO;
+import hust.project.base.modified.Model.ModifiedRecord;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -18,17 +19,19 @@ import static hust.project.base.constants.MetricsConstants.APPLICATION_WIDTH;
 
 public class RejectView {
     private Button confirmButton, cancelButton;
-    private ModifiedDTO currentData;
+    private ModifiedRecord currentData;
 
     // Callbacks
-    private Consumer<ModifiedDTO> onCancelCallback;
+    private Consumer<ModifiedRecord> onCancelCallback;
 
-    private Consumer<ModifiedDTO> onAcceptCallback;
+    private Consumer<ModifiedRecord> onAcceptCallback;
 
-    public void display(ModifiedDTO modifiedDTO) {
+    public void display(ModifiedRecord modifiedDTO) {
         this.currentData = modifiedDTO;
 
         Stage stage = new Stage();
+        Image icon = new Image(getClass().getResourceAsStream("/image/icon.png"));
+        stage.getIcons().add(icon);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Từ chối yêu cầu");
 
@@ -59,11 +62,11 @@ public class RejectView {
         cancelButton.setOnAction(this::onCancelClicked);
     }
 
-    public void setOnConfirmAction(Consumer<ModifiedDTO> onConfirmAction) {
+    public void setOnConfirmAction(Consumer<ModifiedRecord> onConfirmAction) {
         this.onAcceptCallback= onConfirmAction;
     }
 
-    public void setOnCancelAction(Consumer<ModifiedDTO> onCancelAction) {
+    public void setOnCancelAction(Consumer<ModifiedRecord> onCancelAction) {
         this.onCancelCallback = onCancelAction;
     }
 

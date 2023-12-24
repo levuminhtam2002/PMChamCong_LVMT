@@ -1,10 +1,9 @@
 package hust.project.base.home;
 
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 public class HomeController {
-    private static final Home home = Home.instance();
+    private static final HomeView home = HomeView.instance();
     private static HomeController ins;
     private HomeController(){
 
@@ -21,6 +20,5 @@ public class HomeController {
             return;
         }
         home.setCurrentScreen();
-
     }
 }

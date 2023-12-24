@@ -6,12 +6,11 @@ import hust.project.base.employee_subsystem.Employee;
 import hust.project.base.employee_subsystem.HRService;
 import hust.project.base.employee_subsystem.IHRService;
 import hust.project.base.modified.Controller.ModifiedController;
-import hust.project.base.modified.Model.AttendanceRecordDAO;
-import hust.project.base.modified.Model.AttendanceRecordDTO;
+import hust.project.base.modified.Model.AttendanceRecordEntity;
+import hust.project.base.modified.Model.AttendanceRecord;
 import hust.project.base.modified.Model.AttendanceRecordRepository;
-import hust.project.base.modified.Model.ModifiedDTO;
+import hust.project.base.modified.Model.ModifiedRecord;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,8 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.function.Consumer;
 
 import static hust.project.base.constants.MetricsConstants.APPLICATION_HEIGHT;
@@ -48,8 +46,8 @@ public class ModifiedView {
 
     private ModifiedController controller;
 
-    private ModifiedDTO currentData;
-        public void display(ModifiedDTO data) {
+    private ModifiedRecord currentData;
+        public void display(ModifiedRecord data) {
         this.currentData = data;
         Stage window = new Stage();
         Image icon = new Image(getClass().getResourceAsStream("/image/icon.png"));
@@ -74,9 +72,9 @@ public class ModifiedView {
         window.showAndWait();
     }
 
-    private void initializeFormFields(ModifiedDTO data){
-        AttendanceRecordDTO record;
-        AttendanceRecordRepository repository = new AttendanceRecordDAO();
+    private void initializeFormFields(ModifiedRecord data){
+        AttendanceRecord record;
+        AttendanceRecordRepository repository = new AttendanceRecordEntity ();
         if (!data.getRecordId().equals ("******")) {
             record = repository.getAttendanceRecordByRecordId(data.getRecordId());
             dateField = new TextField(record.getDate());
@@ -208,15 +206,15 @@ public class ModifiedView {
         }
     }
 
-    public ModifiedDTO getCurrentData() {return currentData; }
+    public ModifiedRecord getCurrentData() {return currentData; }
     public void close() {
         Stage stage = (Stage) acceptButton.getScene().getWindow();
         stage.close();
     }
 
-    private Consumer<ModifiedDTO> onAcceptCallback;
+    private Consumer<ModifiedRecord> onAcceptCallback;
 
-    public void setOnAcceptAction(Consumer<ModifiedDTO> callback) {
+    public void setOnAcceptAction(Consumer<ModifiedRecord> callback) {
         this.onAcceptCallback = callback;
     }
     private void onAcceptClicked(ActionEvent event) {
@@ -224,9 +222,9 @@ public class ModifiedView {
             onAcceptCallback.accept(getCurrentData());
         }
     }
-    private Consumer<ModifiedDTO> onRejectCallback;
+    private Consumer<ModifiedRecord> onRejectCallback;
 
-    public void setOnRejectAction(Consumer<ModifiedDTO> callback) {
+    public void setOnRejectAction(Consumer<ModifiedRecord> callback) {
         this.onRejectCallback = callback;
     }
     private void onRejectClicked(ActionEvent event) {
@@ -235,9 +233,9 @@ public class ModifiedView {
         }
     }
 
-    private Consumer<ModifiedDTO> onCancelCallback;
+    private Consumer<ModifiedRecord> onCancelCallback;
 
-    public void setOnCancelAction(Consumer<ModifiedDTO> callback) {
+    public void setOnCancelAction(Consumer<ModifiedRecord> callback) {
         this.onCancelCallback = callback;
     }
 

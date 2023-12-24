@@ -1,6 +1,6 @@
 package hust.project.base.modified.Model;
 
-public class ModifiedDTO {
+public class ModifiedRecord {
     private String requestId;
     private String recordId;
     private String scanId; //khong can
@@ -15,7 +15,7 @@ public class ModifiedDTO {
     private String requestType;
 
     // Constructor
-    public ModifiedDTO(String requestId, String recordId, String scanId, String employeeId, String date, String time, String timeModified, String dateModified, String requestReason, String requestStatus, String requestType) {
+    public ModifiedRecord(String requestId, String recordId, String scanId, String employeeId, String date, String time, String timeModified, String dateModified, String requestReason, String requestStatus, String requestType) {
         this.requestId = requestId;
         this.recordId = recordId;
         this.scanId = scanId;
@@ -28,6 +28,8 @@ public class ModifiedDTO {
         this.requestStatus = requestStatus;
         this.requestType = requestType;
     }
+
+
 
     public String getRecordId() {
         return recordId;

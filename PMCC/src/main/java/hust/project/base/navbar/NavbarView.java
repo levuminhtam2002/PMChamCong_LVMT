@@ -15,10 +15,10 @@ import java.util.Objects;
 
 import static hust.project.base.constants.MetricsConstants.*;
 
-public class Navbar extends BorderPane {
+public class NavbarView extends BorderPane {
     private INavbarAction navbarAction;
-    private static Navbar ins;
-    private Navbar(){
+    private static NavbarView ins;
+    private NavbarView(){
         setPrefWidth(NAVBAR_WIDTH);
         setWidth(NAVBAR_WIDTH);
 //        setStyle("-fx-background-color: #FFBE98");
@@ -26,9 +26,9 @@ public class Navbar extends BorderPane {
         setCenter(Center());
         setBottom(Bottom());
     }
-    public static Navbar instance(){
+    public static NavbarView instance(){
         if(ins == null){
-            ins = new Navbar();
+            ins = new NavbarView ();
         }
         return ins;
     }
@@ -60,7 +60,7 @@ public class Navbar extends BorderPane {
     }
     private VBox Center(){
         VBox buttons = new VBox();
-        buttons.setStyle("-fx-background-color: #FFFFF");
+        buttons.setStyle("-fx-background-color: #FFFFFF");
         buttons.setSpacing(10);
         buttons.setAlignment(Pos.TOP_CENTER);
         buttons.setPrefWidth(NAVBAR_WIDTH);

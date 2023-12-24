@@ -3,7 +3,6 @@ package hust.project.base.modified.Controller;
 import hust.project.base.modified.Model.*;
 import hust.project.base.modified.View.ModifiedView;
 import hust.project.base.modified.View.PendingModifiedView;
-import javafx.event.ActionEvent;
 
 import java.util.List;
 
@@ -21,13 +20,13 @@ public class PendingModifiedController {
         if (this.repository == null) {
             System.out.println ("modifiedRepository is null");
         } else {
-            List<ModifiedDTO> pendingRequests = repository.getAllModifiedDTO();
+            List<ModifiedRecord> pendingRequests = repository.getAllModifiedDTO();
             view.updateTable (pendingRequests);
         }
     }
-    private void displayModifiedView(ModifiedDTO data) {
+    private void displayModifiedView(ModifiedRecord data) {
         ModifiedView modifiedView = new ModifiedView();
-        AttendanceRecordRepository attendanceRecordRepository = new AttendanceRecordDAO ();
+        AttendanceRecordRepository attendanceRecordRepository = new AttendanceRecordEntity ();
         ModifiedController modifiedController = new ModifiedController(modifiedView, repository, attendanceRecordRepository);
         modifiedView.display(data);
     }

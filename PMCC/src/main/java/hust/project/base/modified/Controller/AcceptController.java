@@ -19,7 +19,7 @@ public class AcceptController {
         view.setOnCancelAction(this::cancelAcceptance);
     }
 
-    private void confirmAcceptance(ModifiedDTO modifiedDTO) {
+    private void confirmAcceptance(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
             handleModifiedDTO(modifiedDTO);
             view.close();
@@ -27,20 +27,20 @@ public class AcceptController {
         }
     }
 
-    private void cancelAcceptance(ModifiedDTO modifiedDTO) {
+    private void cancelAcceptance(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
             System.out.println("Hủy yêu cầu thành công");
             view.close();
         }
     }
 
-    private void handleModifiedDTO(ModifiedDTO modifiedDTO) {
+    private void handleModifiedDTO(ModifiedRecord modifiedDTO) {
         if ("Chỉnh sửa chấm công".equals(modifiedDTO.getRequestType())) {
             attendanceRecordRepo.updateAttendanceRecord(modifiedDTO.getTime(), modifiedDTO.getRecordId());
             modifiedRepo.updateAcceptModifiedStatus(modifiedDTO.getRequestId());
         } else if ("Thêm chấm công".equals(modifiedDTO.getRequestType())) {
             String newRecordId = attendanceRecordRepo.generateNextRecordId();
-            AttendanceRecordDTO attendanceRecordDTO = new AttendanceRecordDTO();
+            AttendanceRecord attendanceRecordDTO = new AttendanceRecord ();
             attendanceRecordDTO.setRecordId(newRecordId);
             attendanceRecordDTO.setEmployeeId(modifiedDTO.getEmployeeId());
             attendanceRecordDTO.setDate(modifiedDTO.getDate());

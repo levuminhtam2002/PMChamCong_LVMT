@@ -6,26 +6,22 @@ import com.google.gson.JsonObject;
 import hust.project.base.utils.sql_hikari.DatabaseManager;
 import hust.project.base.utils.sql_hikari.SQLJavaBridge;
 
-import java.sql.Time;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-public class ModifiedDAO implements ModifiedRepository {
+public class ModifiedEntity implements ModifiedRepository {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String TIME_FORMAT = "HH:mm:ss";
 
-    public List<ModifiedDTO> getAllModifiedDTO() {
+    public List<ModifiedRecord> getAllModifiedDTO() {
         try {
             SQLJavaBridge bridge = DatabaseManager.instance ().defaulSQLJavaBridge ();
             String query = "SELECT request_id, record_id, scan_id, employee_id, date, time, time_modified, date_modified, request_reason, request_status, request_type FROM pmchamcong.modifiedattendancerecords";
             JsonArray json = bridge.query (query);
-            List<ModifiedDTO> modifiedRequests = new ArrayList<> ();
+            List<ModifiedRecord> modifiedRequests = new ArrayList<> ();
             for (JsonElement element : json) {
                 JsonObject obj = element.getAsJsonObject ();
                 String requestId = obj.get ("request_id").getAsString ();
@@ -39,7 +35,7 @@ public class ModifiedDAO implements ModifiedRepository {
                 String requestReason = obj.get ("request_reason").getAsString ();
                 String requestStatus = obj.get ("request_status").getAsString ();
                 String requestType = obj.get("request_type").getAsString ();
-                ModifiedDTO modifiedDTO = new ModifiedDTO (requestId, recordId, scanId, employeeId, date, time, timeModified, dateModified, requestReason, requestStatus, requestType);
+                ModifiedRecord modifiedDTO = new ModifiedRecord (requestId, recordId, scanId, employeeId, date, time, timeModified, dateModified, requestReason, requestStatus, requestType);
                 modifiedRequests.add (modifiedDTO);
             }
             return modifiedRequests;

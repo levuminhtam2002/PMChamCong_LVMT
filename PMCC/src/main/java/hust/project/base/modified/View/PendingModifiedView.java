@@ -1,24 +1,22 @@
 package hust.project.base.modified.View;
 
-import hust.project.base.modified.Controller.ModifiedController;
 import hust.project.base.modified.Model.*;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.util.Callback;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static hust.project.base.constants.MetricsConstants.MAIN_WIDTH;
 
 public class PendingModifiedView extends VBox {
-    private TableView<ModifiedDTO> requestTable;
+    private TableView<ModifiedRecord> requestTable;
 
     private static PendingModifiedView ins;
 
@@ -35,7 +33,7 @@ public class PendingModifiedView extends VBox {
     private void initializeComponents() {
         setSpacing(20);
         setPrefWidth(MAIN_WIDTH * 0.7);
-        setMaxWidth(MAIN_WIDTH * 0.84);
+        setMaxWidth(MAIN_WIDTH * 0.85);
         Label label = new Label("Danh sách các yêu cầu đang chờ");
         label.setStyle("-fx-font-size: 20px;");
         requestTable = createRequestTable();
@@ -43,10 +41,10 @@ public class PendingModifiedView extends VBox {
 
     }
 
-    private TableView<ModifiedDTO> createRequestTable() {
-        TableView<ModifiedDTO> table = new TableView<>();
+    private TableView<ModifiedRecord> createRequestTable() {
+        TableView<ModifiedRecord> table = new TableView<>();
         table.setEditable(true);
-        TableColumn<ModifiedDTO, Number> sttCol = new TableColumn<>("STT");
+        TableColumn<ModifiedRecord, Number> sttCol = new TableColumn<>("STT");
         sttCol.setMinWidth(35);
         sttCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper<>(table.getItems().indexOf(column.getValue()) + 1));
         sttCol.setSortable(false);
@@ -65,8 +63,8 @@ public class PendingModifiedView extends VBox {
         return table;
     }
 
-    private <T> TableColumn<ModifiedDTO, T> createColumn(String title, String property, Class<T> type, double... maxWidth) {
-        TableColumn<ModifiedDTO, T> column = new TableColumn<>(title);
+    private <T> TableColumn<ModifiedRecord, T> createColumn(String title, String property, Class<T> type, double... maxWidth) {
+        TableColumn<ModifiedRecord, T> column = new TableColumn<>(title);
         column.setCellValueFactory(new PropertyValueFactory<>(property));
         if (maxWidth.length > 0) {
             column.setMaxWidth(maxWidth[0]);
@@ -74,8 +72,8 @@ public class PendingModifiedView extends VBox {
         return column;
     }
 
-    private TableColumn<ModifiedDTO, String> createStatusColumn() {
-        TableColumn<ModifiedDTO, String> statusCol = new TableColumn<>("Trạng thái");
+    private TableColumn<ModifiedRecord, String> createStatusColumn() {
+        TableColumn<ModifiedRecord, String> statusCol = new TableColumn<>("Trạng thái");
         statusCol.setCellValueFactory(new PropertyValueFactory<>("requestStatus"));
         statusCol.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -95,14 +93,19 @@ public class PendingModifiedView extends VBox {
         return statusCol;
     }
 
-    public void createActionColumn(Consumer<ModifiedDTO> displayAction) {
-        TableColumn<ModifiedDTO, Void> actionCol = new TableColumn<>("Actions");
+    public void createActionColumn(Consumer<ModifiedRecord> displayAction) {
+        TableColumn<ModifiedRecord, Void> actionCol = new TableColumn<>("Hành động");
         actionCol.setCellFactory(column -> new TableCell<>() {
-            private final Button btn = new Button("READ");
+            private final Button btn = new Button("Xem");
+
             {
-                btn.setStyle("-fx-background-color: transparent; -fx-text-fill: blue; -fx-font-weight: bold;");
+                btn.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-font-weight: bold;");
+                ImageView image = new ImageView(new Image (Objects.requireNonNull(getClass().getResourceAsStream("/image/View.png"))));
+                image.setFitHeight(20);
+                image.setFitWidth(20);
+                btn.setGraphic (image);
                 btn.setOnAction(event -> {
-                    ModifiedDTO data = getTableView().getItems().get(getIndex());
+                    ModifiedRecord data = getTableView().getItems().get(getIndex());
                     if (data != null) {
                         displayAction.accept(data);
                     }
@@ -117,7 +120,7 @@ public class PendingModifiedView extends VBox {
         requestTable.getColumns().add(actionCol);
     }
 
-    public void updateTable(List<ModifiedDTO> data) {
+    public void updateTable(List<ModifiedRecord> data) {
         requestTable.setItems(FXCollections.observableArrayList(data));
     }
 
