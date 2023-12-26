@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -18,7 +19,10 @@ import static hust.project.base.constants.MetricsConstants.MAIN_WIDTH;
 public class PendingModifiedView extends VBox {
     private TableView<ModifiedRecord> requestTable;
 
+    private List<ModifiedRecord> fullData;
     private static PendingModifiedView ins;
+    private Pagination pagination;
+    private static final int ROWS_PER_PAGE = 10;
 
     public static PendingModifiedView instance() {
         if(ins == null){
@@ -36,8 +40,27 @@ public class PendingModifiedView extends VBox {
         Label label = new Label("Danh sách các yêu cầu đang chờ");
         label.setStyle("-fx-font-size: 20px;");
         requestTable = createRequestTable();
-        getChildren().addAll(label, requestTable);
+        pagination = new Pagination();
+        pagination.setPageFactory(this::createPage);
+        getChildren().addAll(label, requestTable, pagination);
     }
+
+    private VBox createPage(int pageIndex) {
+        int fromIndex = pageIndex * ROWS_PER_PAGE;
+        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, fullData.size());
+        List<ModifiedRecord> pageData = fullData.subList(fromIndex, toIndex);
+        requestTable.setItems(FXCollections.observableArrayList(pageData));
+        return new VBox(requestTable);
+    }
+
+    public void updateTable(List<ModifiedRecord> data) {
+        this.fullData = new ArrayList<>(data);
+        int pageCount = (int) Math.ceil(data.size() / (double) ROWS_PER_PAGE);
+        pagination.setPageCount(pageCount);
+        pagination.setCurrentPageIndex(0);
+        createPage(0);
+    }
+
 
     private TableView<ModifiedRecord> createRequestTable() {
         TableView<ModifiedRecord> table = new TableView<>();
@@ -118,8 +141,6 @@ public class PendingModifiedView extends VBox {
         requestTable.getColumns().add(actionCol);
     }
 
-    public void updateTable(List<ModifiedRecord> data) {
-        requestTable.setItems(FXCollections.observableArrayList(data));
-    }
+
 
 }
