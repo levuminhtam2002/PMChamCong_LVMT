@@ -4,6 +4,7 @@ import hust.project.base.modified.Model.*;
 import hust.project.base.modified.View.ModifiedView;
 import hust.project.base.modified.View.PendingModifiedView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PendingModifiedController {
@@ -39,5 +40,7 @@ public class PendingModifiedController {
         ModifiedController modifiedController = ModifiedController.getInstance(modifiedView, repository, attendanceRecordRepository);
         modifiedView.display(data);
     }
+
+
 
 }

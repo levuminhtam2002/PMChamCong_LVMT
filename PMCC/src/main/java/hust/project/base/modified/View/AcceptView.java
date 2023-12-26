@@ -87,6 +87,9 @@ public class AcceptView {
     private void onAcceptClicked(ActionEvent event) {
         if (onAcceptCallback != null && currentData != null) {
             onAcceptCallback.accept(currentData);
+            showMessage("Yêu cầu đã được phê duyệt", () -> {
+                PendingModifiedView.instance().refreshTable();
+            });
         }
     }
 
@@ -100,13 +103,18 @@ public class AcceptView {
         stage.close();
     }
 
-    public void showMessage(String message) {
-        Platform.runLater (() -> {
-            Alert alert = new Alert (Alert.AlertType.INFORMATION);
-            alert.setTitle ("Thông Báo");
-            alert.setHeaderText ("Succeeded");
-            alert.setContentText (message);
-            alert.showAndWait ();
+    public void showMessage(String message, Runnable afterClose) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Thông Báo");
+            alert.setHeaderText("Succeeded");
+            alert.setContentText(message);
+            alert.showAndWait();
+
+            // This will run after the alert is closed
+            if (afterClose != null) {
+                afterClose.run();
+            }
         });
     }
 }

@@ -21,6 +21,7 @@ public class PendingModifiedView extends VBox {
 
     private List<ModifiedRecord> fullData;
     private static PendingModifiedView ins;
+
     private Pagination pagination;
     private static final int ROWS_PER_PAGE = 10;
 
@@ -139,6 +140,32 @@ public class PendingModifiedView extends VBox {
             }
         });
         requestTable.getColumns().add(actionCol);
+    }
+
+    public void refreshTable() {
+        List<ModifiedRecord> updatedData = fetchData();
+        fullData.clear();
+        fullData.addAll(updatedData);
+        requestTable.setItems(FXCollections.observableArrayList(fullData));
+        requestTable.refresh();
+        updatePagination();
+
+    }
+
+    private void updatePagination() {
+        int pageCount = (int) Math.ceil((double) fullData.size() / ROWS_PER_PAGE);
+        pagination.setPageCount(pageCount);
+        pagination.setCurrentPageIndex(0);
+    }
+
+    private List<ModifiedRecord> fetchData() {
+        ModifiedRepository repository = new ModifiedEntity();
+        if (repository == null) {
+            System.out.println("ModifiedRepository is null");
+            return new ArrayList<>();
+        } else {
+            return repository.getAllModifiedDTO();
+        }
     }
 
 

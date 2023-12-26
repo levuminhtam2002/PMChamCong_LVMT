@@ -1,9 +1,11 @@
 package hust.project.base.modified.View;
 
 import hust.project.base.modified.Model.ModifiedRecord;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -81,6 +83,9 @@ public class RejectView {
     private void onAcceptClicked(ActionEvent event) {
         if (onAcceptCallback != null && currentData != null) {
             onAcceptCallback.accept(currentData);
+            showMessage("Yêu cầu đã bị từ chối", () -> {
+                PendingModifiedView.instance().refreshTable();
+            });
         }
     }
 
@@ -92,5 +97,20 @@ public class RejectView {
     public void close() {
         Stage stage = (Stage) confirmButton.getScene().getWindow();
         stage.close();
+    }
+
+    public void showMessage(String message, Runnable afterClose) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Thông Báo");
+            alert.setHeaderText("Succeeded");
+            alert.setContentText(message);
+            alert.showAndWait();
+
+            // This will run after the alert is closed
+            if (afterClose != null) {
+                afterClose.run();
+            }
+        });
     }
 }
