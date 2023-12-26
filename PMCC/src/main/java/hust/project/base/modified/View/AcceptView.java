@@ -1,9 +1,11 @@
 package hust.project.base.modified.View;
 
 import hust.project.base.modified.Model.ModifiedRecord;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -98,4 +100,13 @@ public class AcceptView {
         stage.close();
     }
 
+    public void showMessage(String message) {
+        Platform.runLater (() -> {
+            Alert alert = new Alert (Alert.AlertType.INFORMATION);
+            alert.setTitle ("Thông Báo");
+            alert.setHeaderText ("Succeeded");
+            alert.setContentText (message);
+            alert.showAndWait ();
+        });
+    }
 }

@@ -2,6 +2,8 @@ package hust.project.base.modified.Controller;
 
 import hust.project.base.modified.Model.*;
 import hust.project.base.modified.View.AcceptView;
+import javafx.application.Platform;
+
 public class AcceptController {
     private AcceptView view;
     private AttendanceRecordRepository attendanceRecordRepo;
@@ -9,7 +11,7 @@ public class AcceptController {
 
     private static AcceptController instance;
 
-    private AcceptController(AcceptView view, AttendanceRecordRepository attendanceRecordRepo, ModifiedRepository modifiedRepo) {
+    public AcceptController(AcceptView view, AttendanceRecordRepository attendanceRecordRepo, ModifiedRepository modifiedRepo) {
         this.view = view;
         this.attendanceRecordRepo = attendanceRecordRepo;
         this.modifiedRepo = modifiedRepo;
@@ -44,9 +46,11 @@ public class AcceptController {
     }
 
     public void handleModifiedDTO(ModifiedRecord modifiedDTO) {
+        String message = "";
         if ("Chỉnh sửa chấm công".equals(modifiedDTO.getRequestType())) {
             attendanceRecordRepo.updateAttendanceRecord(modifiedDTO.getTime(), modifiedDTO.getRecordId());
             modifiedRepo.updateAcceptModifiedStatus(modifiedDTO.getRequestId());
+            message = "Cập nhật thành công";
         } else if ("Thêm chấm công".equals(modifiedDTO.getRequestType())) {
             String newRecordId = attendanceRecordRepo.generateNextRecordId();
             AttendanceRecord attendanceRecordDTO = new AttendanceRecord ();
@@ -57,7 +61,10 @@ public class AcceptController {
             attendanceRecordDTO.setFingerscannerId("0");
             attendanceRecordRepo.insertAttendanceRecord(attendanceRecordDTO);
             modifiedRepo.updateAcceptModifiedRecordId(modifiedDTO.getRequestId(), newRecordId);
+            message = "Thêm mới thành công";
         }
+        view.showMessage(message);
+
     }
 
 }
