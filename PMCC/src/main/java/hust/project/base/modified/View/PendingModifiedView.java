@@ -26,7 +26,6 @@ public class PendingModifiedView extends VBox {
         }
         return ins;
     }
-
     public PendingModifiedView() {
         initializeComponents();
     }
@@ -38,7 +37,6 @@ public class PendingModifiedView extends VBox {
         label.setStyle("-fx-font-size: 20px;");
         requestTable = createRequestTable();
         getChildren().addAll(label, requestTable);
-
     }
 
     private TableView<ModifiedRecord> createRequestTable() {

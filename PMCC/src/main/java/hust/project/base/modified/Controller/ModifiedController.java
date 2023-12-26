@@ -13,12 +13,23 @@ public class ModifiedController{
     private ModifiedRepository modifiedRepository;
     private AttendanceRecordRepository attendanceRecordRepository;
 
-    public ModifiedController(ModifiedView view, ModifiedRepository modifiedRepository, AttendanceRecordRepository attendanceRecordRepository) {
+//    private static AcceptController instance;
+
+    private static ModifiedController instance;
+
+    public static ModifiedController getInstance(ModifiedView view, ModifiedRepository modifiedRepository, AttendanceRecordRepository attendanceRecordRepository) {
+        if (instance == null) {
+            instance = new ModifiedController(view, modifiedRepository, attendanceRecordRepository);
+        }
+        return instance;
+    }
+
+
+    private ModifiedController(ModifiedView view, ModifiedRepository modifiedRepository, AttendanceRecordRepository attendanceRecordRepository) {
         this.view = view;
         this.modifiedRepository = modifiedRepository;
         this.attendanceRecordRepository = attendanceRecordRepository;
         setupViewActions();
-
     }
     public void setupViewActions() {
         view.setOnAcceptAction(this::handleAccept);
@@ -27,22 +38,23 @@ public class ModifiedController{
     }
     private void handleAccept(ModifiedRecord data) {
         if (data != null) {
-            AcceptView acceptView = new AcceptView();
-            view.close ();
-            new AcceptController(acceptView, attendanceRecordRepository, modifiedRepository);
+            // Using Singleton pattern
+            AcceptView acceptView = AcceptView.instance();
+            view.close();
+            AcceptController acceptController = AcceptController.getInstance(acceptView, attendanceRecordRepository, modifiedRepository);
             acceptView.display(data);
-
         }
     }
 
     private void handleReject(ModifiedRecord data) {
         if (data != null) {
-            RejectView rejectView = new RejectView ();
-            view.close ();
-            new RejectController(rejectView, modifiedRepository);
+            RejectView rejectView = RejectView.instance();
+            view.close();
+            RejectController rejectController = RejectController.getInstance(rejectView, modifiedRepository);
             rejectView.display(data);
         }
     }
+
     private void handleCancel (ModifiedRecord data){
             view.close ();
     }

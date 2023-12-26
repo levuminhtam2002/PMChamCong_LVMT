@@ -29,48 +29,6 @@ public class AttendanceRecordEntity implements AttendanceRecordRepository{
         }
     }
 
-
-    public List<AttendanceRecord> getAllAttendanceRecord() {
-            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-            List<AttendanceRecord> records = new ArrayList<>();
-            try {
-                String query = "SELECT * FROM attendancerecords";
-                JsonArray jsonArray = bridge.query(query);
-                for (JsonElement element : jsonArray) {
-                    JsonObject obj = element.getAsJsonObject();
-                    String recordId = obj.get("record_id").getAsString();
-                    String employeeId = obj.get("employee_id").getAsString();
-                    String fingerscannerId = obj.get("fingerscanner_id").getAsString();
-                    String date = obj.get("date").getAsString();
-                    String time = obj.get("time").getAsString();
-                    records.add(new AttendanceRecord (recordId, employeeId, fingerscannerId, date, time));
-                }
-            } catch (Exception e) {
-                // Log or handle the exception
-            }
-            return records;
-        }
-        public List<AttendanceRecord> getAttendanceRecordByEmployeeId(String employeeId) {
-            SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
-            List<AttendanceRecord> records = new ArrayList<>();
-            try {
-                String query = "SELECT * FROM attendancerecords WHERE employee_id = ?";
-                JsonArray jsonArray = bridge.query(query, employeeId);
-                for (JsonElement element : jsonArray) {
-                    JsonObject obj = element.getAsJsonObject();
-                    String recordId = obj.get("record_id").getAsString();
-                    String fingerscannerId = obj.get("fingerscanner_id").getAsString();
-                    String date = obj.get("date").getAsString();
-                    String time = obj.get("time").getAsString();
-                    records.add(new AttendanceRecord (recordId, employeeId, fingerscannerId, date, time));
-                }
-            } catch (Exception e) {
-               e.printStackTrace();
-            }
-            return records;
-        }
-
-
     public String generateNextRecordId() {
         SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
         try {

@@ -26,6 +26,14 @@ public class RejectView {
 
     private Consumer<ModifiedRecord> onAcceptCallback;
 
+
+    private static RejectView ins;
+    public static RejectView instance() {
+        if(ins == null){
+            ins = new RejectView ();
+        }
+        return ins;
+    }
     public void display(ModifiedRecord modifiedDTO) {
         this.currentData = modifiedDTO;
 

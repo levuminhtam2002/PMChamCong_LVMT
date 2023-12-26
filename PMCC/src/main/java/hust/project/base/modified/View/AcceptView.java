@@ -25,6 +25,16 @@ public class AcceptView {
 
     private Consumer<ModifiedRecord> onAcceptCallback;
 
+    private static AcceptView ins;
+
+    public static AcceptView instance() {
+        if(ins == null){
+            ins = new AcceptView ();
+        }
+        return ins;
+    }
+
+
     // Callbacks
     public void display(ModifiedRecord modifiedDTO) {
         this.currentData = modifiedDTO;

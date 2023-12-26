@@ -46,6 +46,15 @@ public class ModifiedView {
 
     private ModifiedController controller;
 
+    private static ModifiedView instance;
+
+    public static ModifiedView getInstance() {
+        if (instance == null) {
+            instance = new ModifiedView();
+        }
+        return instance;
+    }
+
     private ModifiedRecord currentData;
         public void display(ModifiedRecord data) {
         this.currentData = data;

@@ -7,11 +7,20 @@ public class AcceptController {
     private AttendanceRecordRepository attendanceRecordRepo;
     private ModifiedRepository modifiedRepo;
 
-    public AcceptController(AcceptView view, AttendanceRecordRepository attendanceRecordRepo, ModifiedRepository modifiedRepo) {
+    private static AcceptController instance;
+
+    private AcceptController(AcceptView view, AttendanceRecordRepository attendanceRecordRepo, ModifiedRepository modifiedRepo) {
         this.view = view;
         this.attendanceRecordRepo = attendanceRecordRepo;
         this.modifiedRepo = modifiedRepo;
         setupViewActions();
+    }
+
+    public static AcceptController getInstance(AcceptView view, AttendanceRecordRepository attendanceRecordRepo, ModifiedRepository modifiedRepo) {
+        if (instance == null) {
+            instance = new AcceptController(view, attendanceRecordRepo, modifiedRepo);
+        }
+        return instance;
     }
 
     private void setupViewActions() {
@@ -19,7 +28,7 @@ public class AcceptController {
         view.setOnCancelAction(this::cancelAcceptance);
     }
 
-    private void confirmAcceptance(ModifiedRecord modifiedDTO) {
+    public void confirmAcceptance(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
             handleModifiedDTO(modifiedDTO);
             view.close();
@@ -34,7 +43,7 @@ public class AcceptController {
         }
     }
 
-    private void handleModifiedDTO(ModifiedRecord modifiedDTO) {
+    public void handleModifiedDTO(ModifiedRecord modifiedDTO) {
         if ("Chỉnh sửa chấm công".equals(modifiedDTO.getRequestType())) {
             attendanceRecordRepo.updateAttendanceRecord(modifiedDTO.getTime(), modifiedDTO.getRecordId());
             modifiedRepo.updateAcceptModifiedStatus(modifiedDTO.getRequestId());

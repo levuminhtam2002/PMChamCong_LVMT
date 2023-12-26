@@ -10,11 +10,19 @@ public class PendingModifiedController {
     private PendingModifiedView view;
     private ModifiedRepository repository;
 
+    private static PendingModifiedController instance;
+
     public PendingModifiedController(PendingModifiedView view, ModifiedRepository repository) {
         this.view = view;
         this.repository = repository;
         loadPendingRequests();
         view.createActionColumn(this::displayModifiedView);
+    }
+    public static PendingModifiedController getInstance(PendingModifiedView view, ModifiedRepository repository) {
+        if (instance == null) {
+            instance = new PendingModifiedController(view, repository);
+        }
+        return instance;
     }
     private void loadPendingRequests() {
         if (this.repository == null) {
@@ -25,9 +33,11 @@ public class PendingModifiedController {
         }
     }
     private void displayModifiedView(ModifiedRecord data) {
-        ModifiedView modifiedView = new ModifiedView();
-        AttendanceRecordRepository attendanceRecordRepository = new AttendanceRecordEntity ();
-        ModifiedController modifiedController = new ModifiedController(modifiedView, repository, attendanceRecordRepository);
+        // Using Singleton pattern
+        ModifiedView modifiedView = ModifiedView.getInstance();
+        AttendanceRecordRepository attendanceRecordRepository = new AttendanceRecordEntity();
+        ModifiedController modifiedController = ModifiedController.getInstance(modifiedView, repository, attendanceRecordRepository);
         modifiedView.display(data);
     }
+
 }

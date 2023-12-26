@@ -8,10 +8,19 @@ public class RejectController {
     private RejectView view;
     private ModifiedRepository modifiedRepo;
 
-    public RejectController(RejectView view, ModifiedRepository modifiedRepo) {
+    private static RejectController instance;
+
+    private RejectController(RejectView view, ModifiedRepository modifiedRepo) {
         this.view = view;
         this.modifiedRepo = modifiedRepo;
         setupViewActions();
+    }
+
+    public static RejectController getInstance(RejectView view, ModifiedRepository modifiedRepo) {
+        if (instance == null) {
+            instance = new RejectController(view, modifiedRepo);
+        }
+        return instance;
     }
 
     private void setupViewActions() {
@@ -33,6 +42,5 @@ public class RejectController {
             view.close();
         }
     }
-
 
 }
