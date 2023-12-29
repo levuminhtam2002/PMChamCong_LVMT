@@ -28,7 +28,7 @@ public class RejectController {
         view.setOnCancelAction(this::cancelAcceptance);
     }
 
-    private void confirmRejection(ModifiedRecord modifiedDTO) {
+    public void confirmRejection(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
             confirmService.handleRejectAction(modifiedDTO);
             view.close();
@@ -36,7 +36,7 @@ public class RejectController {
         }
     }
 
-    private void cancelAcceptance(ModifiedRecord modifiedDTO) {
+    public void cancelAcceptance(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
             System.out.println("Hủy ");
             view.close();

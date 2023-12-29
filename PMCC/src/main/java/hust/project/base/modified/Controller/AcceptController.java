@@ -28,7 +28,7 @@ public class AcceptController {
         view.setOnCancelAction(this::cancelAcceptance);
     }
 
-    private void confirmAcceptance(ModifiedRecord modifiedDTO) {
+    public void confirmAcceptance(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
             confirmService.handleAcceptAction(modifiedDTO);
             view.close();
@@ -36,7 +36,7 @@ public class AcceptController {
         }
     }
 
-    private void cancelAcceptance(ModifiedRecord modifiedDTO) {
+    public void cancelAcceptance(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
             System.out.println("Hủy yêu cầu thành công");
             view.close();
