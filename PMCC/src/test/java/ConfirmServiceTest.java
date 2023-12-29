@@ -45,4 +45,85 @@ class ConfirmServiceTest {
         confirmService.handleRejectAction(modifiedDTO);
         verify(modifiedRepo, times(1)).updateRejectModifiedStatus(modifiedDTO.getRequestId());
     }
+    @Test
+    void testUpdateAttendanceRecordSuccess() {
+        attendanceRecordRepo.updateAttendanceRecord("09:00:00", "RECORD001");
+        verify(attendanceRecordRepo, times(1)).updateAttendanceRecord("09:00:00", "RECORD001");
+    }
+
+    @Test
+    void testUpdateAttendanceRecordNotFound() {
+        attendanceRecordRepo.updateAttendanceRecord("09:00:00", "RECORD999");
+        verify(attendanceRecordRepo, times(1)).updateAttendanceRecord("09:00:00", "RECORD999");
+    }
+//    b. Test updateAcceptModifiedStatus(String requestId)
+
+    @Test
+    void testUpdateAcceptModifiedStatusSuccess() {
+        modifiedRepo.updateAcceptModifiedStatus("REQ0001");
+        verify(modifiedRepo, times(1)).updateAcceptModifiedStatus("REQ0001");
+    }
+
+    @Test
+    void testUpdateAcceptModifiedStatusNotFound() {
+        modifiedRepo.updateAcceptModifiedStatus("REQ9999");
+        verify(modifiedRepo, times(1)).updateAcceptModifiedStatus("REQ9999");
+    }
+    //    Test updateAcceptModifiedRecordId(String requestId, String recordId)
+    @Test
+    void testUpdateAcceptModifiedRecordIdSuccess() {
+        modifiedRepo.updateAcceptModifiedRecordId("REQ0011", "RECORD007");
+        verify(modifiedRepo, times(1)).updateAcceptModifiedRecordId("REQ0011", "RECORD007");
+    }
+
+    @Test
+    void testUpdateAcceptModifiedRecordIdNotFound() {
+        modifiedRepo.updateAcceptModifiedRecordId("REQ9999", "RECORD007");
+        verify(modifiedRepo, times(1)).updateAcceptModifiedRecordId("REQ9999", "RECORD007");
+    }
+
+    //    d. Test updateRejectModifiedStatus(String requestId)
+    @Test
+    void testUpdateRejectModifiedStatusSuccess() {
+        modifiedRepo.updateRejectModifiedStatus("REQ0001");
+        verify(modifiedRepo, times(1)).updateRejectModifiedStatus("REQ0001");
+    }
+
+    @Test
+    void testUpdateRejectModifiedStatusNotFound() {
+        modifiedRepo.updateRejectModifiedStatus("REQ9999");
+        verify(modifiedRepo, times(1)).updateRejectModifiedStatus("REQ9999");
+    }
+
+    @Test
+    void testGenerateNextRecordIdWithData() {
+        when(attendanceRecordRepo.generateNextRecordId()).thenReturn("RECORD024");
+        String nextId = attendanceRecordRepo.generateNextRecordId();
+        assertEquals("RECORD024", nextId);
+        verify(attendanceRecordRepo, times(1)).generateNextRecordId();
+    }
+
+    @Test
+    void testGenerateNextRecordIdWithNoData() {
+        when(attendanceRecordRepo.generateNextRecordId()).thenReturn("RECORD001");
+        String nextId = attendanceRecordRepo.generateNextRecordId();
+        assertEquals("RECORD001", nextId);
+        verify(attendanceRecordRepo, times(1)).generateNextRecordId();
+    }
+
+    // Thêm các test cases cho insertAttendanceRecord
+    @Test
+    void testInsertAttendanceRecordSuccess() {
+        ModifiedRecord modifiedRecord = new ModifiedRecord("REQ001", "RECORD001", "SCAN0001", "EMP001", "16-12-2023", "08:00:00", null, null, "Dấu thời gian không chính xác", "Pending", "Thêm chấm công");
+        when(attendanceRecordRepo.generateNextRecordId()).thenReturn("RECORD001");
+        confirmService.handleAcceptAction (modifiedRecord);
+        verify(attendanceRecordRepo, times(1)).insertAttendanceRecord(any(AttendanceRecord.class));
+    }
+    @Test
+    void testInsertAttendanceRecordWithExistingId() {
+        ModifiedRecord modifiedRecord = new ModifiedRecord("REQ002", null, null, "EMP002", "16-12-2023", "09:00:00", null, null, "Máy quét hỏng", "Pending", "Thêm chấm công");
+        when(attendanceRecordRepo.generateNextRecordId()).thenReturn("RECORD001");
+        confirmService.handleAcceptAction (modifiedRecord);
+        verify(attendanceRecordRepo, times(1)).insertAttendanceRecord(any(AttendanceRecord.class));
+    }
 }
