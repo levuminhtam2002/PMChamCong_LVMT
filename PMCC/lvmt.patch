@@ -1,0 +1,345 @@
+Index: PMCC/src/main/java/hust/project/base/modified/Controller/AcceptController.java
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/Controller/AcceptController.java b/PMCC/src/main/java/hust/project/base/modified/Controller/AcceptController.java
+--- a/PMCC/src/main/java/hust/project/base/modified/Controller/AcceptController.java	(revision dd6b1b6e45a5b445955ee1c95ab356c9317ba57c)
++++ b/PMCC/src/main/java/hust/project/base/modified/Controller/AcceptController.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -4,7 +4,7 @@
+ import hust.project.base.modified.View.AcceptView;
+ import javafx.application.Platform;
+ 
+-public class AcceptController {
++public class AcceptController implements IAcceptController{
+     private AcceptView view;
+     private AttendanceRecordRepository attendanceRecordRepo;
+     private ModifiedRepository modifiedRepo;
+@@ -25,7 +25,7 @@
+         return instance;
+     }
+ 
+-    private void setupViewActions() {
++    public void setupViewActions() {
+         view.setOnConfirmAction (this::confirmAcceptance);
+         view.setOnCancelAction(this::cancelAcceptance);
+     }
+@@ -38,7 +38,7 @@
+         }
+     }
+ 
+-    private void cancelAcceptance(ModifiedRecord modifiedDTO) {
++    public void cancelAcceptance(ModifiedRecord modifiedDTO) {
+         if (modifiedDTO != null) {
+             System.out.println("Hủy yêu cầu thành công");
+             view.close();
+Index: PMCC/src/main/java/hust/project/base/modified/Controller/IAcceptController.java
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/Controller/IAcceptController.java b/PMCC/src/main/java/hust/project/base/modified/Controller/IAcceptController.java
+new file mode 100644
+--- /dev/null	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
++++ b/PMCC/src/main/java/hust/project/base/modified/Controller/IAcceptController.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -0,0 +1,9 @@
++package hust.project.base.modified.Controller;
++
++import hust.project.base.modified.Model.ModifiedRecord;
++
++public interface IAcceptController {
++    void setupViewActions();
++    void confirmAcceptance(ModifiedRecord modifiedDTO);
++    void cancelAcceptance(ModifiedRecord modifiedDTO);
++}
+Index: PMCC/src/main/java/hust/project/base/modified/Controller/IModifiedController.java
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/Controller/IModifiedController.java b/PMCC/src/main/java/hust/project/base/modified/Controller/IModifiedController.java
+new file mode 100644
+--- /dev/null	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
++++ b/PMCC/src/main/java/hust/project/base/modified/Controller/IModifiedController.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -0,0 +1,10 @@
++package hust.project.base.modified.Controller;
++
++import hust.project.base.modified.Model.ModifiedRecord;
++
++public interface IModifiedController {
++    void setupViewActions();
++    void handleAccept(ModifiedRecord data);
++    void handleReject(ModifiedRecord data);
++    void handleCancel(ModifiedRecord data);
++}
+Index: PMCC/src/main/java/hust/project/base/modified/Controller/IPendingModifiedController.java
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/Controller/IPendingModifiedController.java b/PMCC/src/main/java/hust/project/base/modified/Controller/IPendingModifiedController.java
+new file mode 100644
+--- /dev/null	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
++++ b/PMCC/src/main/java/hust/project/base/modified/Controller/IPendingModifiedController.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -0,0 +1,8 @@
++package hust.project.base.modified.Controller;
++
++import hust.project.base.modified.Model.ModifiedRecord;
++
++public interface IPendingModifiedController {
++    void loadPendingRequests();
++    void displayModifiedView(ModifiedRecord data);
++}
+Index: PMCC/src/main/java/hust/project/base/modified/Controller/IRejectController.java
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/Controller/IRejectController.java b/PMCC/src/main/java/hust/project/base/modified/Controller/IRejectController.java
+new file mode 100644
+--- /dev/null	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
++++ b/PMCC/src/main/java/hust/project/base/modified/Controller/IRejectController.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -0,0 +1,9 @@
++package hust.project.base.modified.Controller;
++
++import hust.project.base.modified.Model.ModifiedRecord;
++
++public interface IRejectController {
++    void setupViewActions();
++    void confirmRejection(ModifiedRecord modifiedDTO);
++    void cancelAcceptance(ModifiedRecord modifiedDTO);
++}
+Index: PMCC/src/main/java/hust/project/base/modified/Controller/ModifiedController.java
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/Controller/ModifiedController.java b/PMCC/src/main/java/hust/project/base/modified/Controller/ModifiedController.java
+--- a/PMCC/src/main/java/hust/project/base/modified/Controller/ModifiedController.java	(revision dd6b1b6e45a5b445955ee1c95ab356c9317ba57c)
++++ b/PMCC/src/main/java/hust/project/base/modified/Controller/ModifiedController.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -8,13 +8,11 @@
+ import hust.project.base.modified.View.RejectView;
+ 
+ 
+-public class ModifiedController{
++public class ModifiedController implements IModifiedController{
+     private ModifiedView view;
+     private ModifiedRepository modifiedRepository;
+     private AttendanceRecordRepository attendanceRecordRepository;
+ 
+-//    private static AcceptController instance;
+-
+     private static ModifiedController instance;
+ 
+     public static ModifiedController getInstance(ModifiedView view, ModifiedRepository modifiedRepository, AttendanceRecordRepository attendanceRecordRepository) {
+@@ -36,26 +34,24 @@
+         view.setOnRejectAction(this::handleReject);
+         view.setOnCancelAction(this::handleCancel);
+     }
+-    private void handleAccept(ModifiedRecord data) {
++    public void handleAccept(ModifiedRecord data) {
+         if (data != null) {
+             // Using Singleton pattern
+             AcceptView acceptView = AcceptView.instance();
+             view.close();
+-            AcceptController acceptController = AcceptController.getInstance(acceptView, attendanceRecordRepository, modifiedRepository);
+             acceptView.display(data);
+         }
+     }
+ 
+-    private void handleReject(ModifiedRecord data) {
++    public void handleReject(ModifiedRecord data) {
+         if (data != null) {
+             RejectView rejectView = RejectView.instance();
+             view.close();
+-            RejectController rejectController = RejectController.getInstance(rejectView, modifiedRepository);
+             rejectView.display(data);
+         }
+     }
+ 
+-    private void handleCancel (ModifiedRecord data){
++    public void handleCancel (ModifiedRecord data){
+             view.close ();
+     }
+ 
+Index: PMCC/src/main/java/hust/project/base/modified/Controller/PendingModifiedController.java
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/Controller/PendingModifiedController.java b/PMCC/src/main/java/hust/project/base/modified/Controller/PendingModifiedController.java
+--- a/PMCC/src/main/java/hust/project/base/modified/Controller/PendingModifiedController.java	(revision dd6b1b6e45a5b445955ee1c95ab356c9317ba57c)
++++ b/PMCC/src/main/java/hust/project/base/modified/Controller/PendingModifiedController.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -4,10 +4,9 @@
+ import hust.project.base.modified.View.ModifiedView;
+ import hust.project.base.modified.View.PendingModifiedView;
+ 
+-import java.util.ArrayList;
+ import java.util.List;
+ 
+-public class PendingModifiedController {
++public class PendingModifiedController implements IPendingModifiedController {
+     private PendingModifiedView view;
+     private ModifiedRepository repository;
+ 
+@@ -25,7 +24,7 @@
+         }
+         return instance;
+     }
+-    private void loadPendingRequests() {
++    public void loadPendingRequests() {
+         if (this.repository == null) {
+             System.out.println ("modifiedRepository is null");
+         } else {
+@@ -33,11 +32,9 @@
+             view.updateTable (pendingRequests);
+         }
+     }
+-    private void displayModifiedView(ModifiedRecord data) {
++    public void displayModifiedView(ModifiedRecord data) {
+         // Using Singleton pattern
+         ModifiedView modifiedView = ModifiedView.getInstance();
+-        AttendanceRecordRepository attendanceRecordRepository = new AttendanceRecordEntity();
+-        ModifiedController modifiedController = ModifiedController.getInstance(modifiedView, repository, attendanceRecordRepository);
+         modifiedView.display(data);
+     }
+ 
+Index: PMCC/src/main/java/hust/project/base/modified/Controller/RejectController.java
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/Controller/RejectController.java b/PMCC/src/main/java/hust/project/base/modified/Controller/RejectController.java
+--- a/PMCC/src/main/java/hust/project/base/modified/Controller/RejectController.java	(revision dd6b1b6e45a5b445955ee1c95ab356c9317ba57c)
++++ b/PMCC/src/main/java/hust/project/base/modified/Controller/RejectController.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -4,7 +4,7 @@
+ import hust.project.base.modified.Model.ModifiedRepository;
+ import hust.project.base.modified.View.RejectView;
+ 
+-public class RejectController {
++public class RejectController implements IRejectController{
+     private RejectView view;
+     private ModifiedRepository modifiedRepo;
+ 
+@@ -23,12 +23,12 @@
+         return instance;
+     }
+ 
+-    private void setupViewActions() {
++    public void setupViewActions() {
+         view.setOnConfirmAction(this::confirmRejection);
+         view.setOnCancelAction(this::cancelAcceptance);
+     }
+ 
+-    private void confirmRejection(ModifiedRecord modifiedDTO) {
++    public void confirmRejection(ModifiedRecord modifiedDTO) {
+         if (modifiedDTO != null) {
+             modifiedRepo.updateRejectModifiedStatus(modifiedDTO.getRequestId());
+             System.out.println("Từ chối thành công");
+@@ -36,7 +36,7 @@
+         }
+     }
+ 
+-    private void cancelAcceptance(ModifiedRecord modifiedDTO) {
++    public void cancelAcceptance(ModifiedRecord modifiedDTO) {
+         if (modifiedDTO != null) {
+             System.out.println("Hủy ");
+             view.close();
+Index: PMCC/src/main/java/hust/project/base/modified/View/AcceptView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/View/AcceptView.java b/PMCC/src/main/java/hust/project/base/modified/View/AcceptView.java
+--- a/PMCC/src/main/java/hust/project/base/modified/View/AcceptView.java	(revision dd6b1b6e45a5b445955ee1c95ab356c9317ba57c)
++++ b/PMCC/src/main/java/hust/project/base/modified/View/AcceptView.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -1,5 +1,6 @@
+ package hust.project.base.modified.View;
+ 
++import hust.project.base.modified.Controller.IAcceptController;
+ import hust.project.base.modified.Model.ModifiedRecord;
+ import javafx.application.Platform;
+ import javafx.event.ActionEvent;
+@@ -28,6 +29,12 @@
+     private Consumer<ModifiedRecord> onAcceptCallback;
+ 
+     private static AcceptView ins;
++    private IAcceptController controller;
++
++    public void setController(IAcceptController controller) {
++        this.controller = controller;
++    }
++
+ 
+     public static AcceptView instance() {
+         if(ins == null){
+@@ -110,8 +117,6 @@
+             alert.setHeaderText("Succeeded");
+             alert.setContentText(message);
+             alert.showAndWait();
+-
+-            // This will run after the alert is closed
+             if (afterClose != null) {
+                 afterClose.run();
+             }
+Index: PMCC/src/main/java/hust/project/base/modified/View/ModifiedView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/View/ModifiedView.java b/PMCC/src/main/java/hust/project/base/modified/View/ModifiedView.java
+--- a/PMCC/src/main/java/hust/project/base/modified/View/ModifiedView.java	(revision dd6b1b6e45a5b445955ee1c95ab356c9317ba57c)
++++ b/PMCC/src/main/java/hust/project/base/modified/View/ModifiedView.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -5,6 +5,7 @@
+ import hust.project.base.employee_subsystem.Employee;
+ import hust.project.base.employee_subsystem.HRService;
+ import hust.project.base.employee_subsystem.IHRService;
++import hust.project.base.modified.Controller.IModifiedController;
+ import hust.project.base.modified.Controller.ModifiedController;
+ import hust.project.base.modified.Model.AttendanceRecordEntity;
+ import hust.project.base.modified.Model.AttendanceRecord;
+@@ -44,7 +45,11 @@
+ 
+     private Button acceptButton, rejectButton, cancelButton;
+ 
+-    private ModifiedController controller;
++    private IModifiedController controller;
++
++    public void setController(IModifiedController controller) {
++        this.controller = controller;
++    }
+ 
+     private static ModifiedView instance;
+ 
+Index: PMCC/src/main/java/hust/project/base/modified/View/PendingModifiedView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/View/PendingModifiedView.java b/PMCC/src/main/java/hust/project/base/modified/View/PendingModifiedView.java
+--- a/PMCC/src/main/java/hust/project/base/modified/View/PendingModifiedView.java	(revision dd6b1b6e45a5b445955ee1c95ab356c9317ba57c)
++++ b/PMCC/src/main/java/hust/project/base/modified/View/PendingModifiedView.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -1,5 +1,6 @@
+ package hust.project.base.modified.View;
+ 
++import hust.project.base.modified.Controller.IPendingModifiedController;
+ import hust.project.base.modified.Model.*;
+ import javafx.collections.FXCollections;
+ import javafx.scene.control.*;
+@@ -25,6 +26,12 @@
+     private Pagination pagination;
+     private static final int ROWS_PER_PAGE = 10;
+ 
++    private IPendingModifiedController controller;
++
++    public void setController(IPendingModifiedController controller) {
++        this.controller = controller;
++        // Rest of the setup
++    }
+     public static PendingModifiedView instance() {
+         if(ins == null){
+             ins = new PendingModifiedView ();
+Index: PMCC/src/main/java/hust/project/base/modified/View/RejectView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/PMCC/src/main/java/hust/project/base/modified/View/RejectView.java b/PMCC/src/main/java/hust/project/base/modified/View/RejectView.java
+--- a/PMCC/src/main/java/hust/project/base/modified/View/RejectView.java	(revision dd6b1b6e45a5b445955ee1c95ab356c9317ba57c)
++++ b/PMCC/src/main/java/hust/project/base/modified/View/RejectView.java	(revision 2181fbc5dac84fd89867a669e348b0e2b10cdef8)
+@@ -1,5 +1,6 @@
+ package hust.project.base.modified.View;
+ 
++import hust.project.base.modified.Controller.IRejectController;
+ import hust.project.base.modified.Model.ModifiedRecord;
+ import javafx.application.Platform;
+ import javafx.event.ActionEvent;
+@@ -30,6 +31,12 @@
+ 
+ 
+     private static RejectView ins;
++
++    private IRejectController controller;
++
++    public void setController(IRejectController controller) {
++        this.controller = controller;
++    }
+     public static RejectView instance() {
+         if(ins == null){
+             ins = new RejectView ();

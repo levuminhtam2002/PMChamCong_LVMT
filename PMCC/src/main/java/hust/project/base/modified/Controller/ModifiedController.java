@@ -13,7 +13,8 @@ public class ModifiedController{
     private ModifiedRepository modifiedRepository;
     private AttendanceRecordRepository attendanceRecordRepository;
 
-//    private static AcceptController instance;
+    private IConfirmService confirmService;
+
 
     private static ModifiedController instance;
 
@@ -29,6 +30,7 @@ public class ModifiedController{
         this.view = view;
         this.modifiedRepository = modifiedRepository;
         this.attendanceRecordRepository = attendanceRecordRepository;
+        this.confirmService = new ConfirmService(attendanceRecordRepository,modifiedRepository);
         setupViewActions();
     }
     public void setupViewActions() {
@@ -38,10 +40,9 @@ public class ModifiedController{
     }
     private void handleAccept(ModifiedRecord data) {
         if (data != null) {
-            // Using Singleton pattern
             AcceptView acceptView = AcceptView.instance();
             view.close();
-            AcceptController acceptController = AcceptController.getInstance(acceptView, attendanceRecordRepository, modifiedRepository);
+            AcceptController acceptController = AcceptController.getInstance(acceptView, confirmService);
             acceptView.display(data);
         }
     }
@@ -50,7 +51,7 @@ public class ModifiedController{
         if (data != null) {
             RejectView rejectView = RejectView.instance();
             view.close();
-            RejectController rejectController = RejectController.getInstance(rejectView, modifiedRepository);
+            RejectController rejectController = RejectController.getInstance(rejectView, confirmService);
             rejectView.display(data);
         }
     }

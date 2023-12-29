@@ -6,33 +6,31 @@ import javafx.application.Platform;
 
 public class AcceptController {
     private AcceptView view;
-    private AttendanceRecordRepository attendanceRecordRepo;
-    private ModifiedRepository modifiedRepo;
+    private IConfirmService confirmService;
 
     private static AcceptController instance;
 
-    public AcceptController(AcceptView view, AttendanceRecordRepository attendanceRecordRepo, ModifiedRepository modifiedRepo) {
+    public AcceptController(AcceptView view, IConfirmService confirmService) {
         this.view = view;
-        this.attendanceRecordRepo = attendanceRecordRepo;
-        this.modifiedRepo = modifiedRepo;
+        this.confirmService = confirmService;
         setupViewActions();
     }
 
-    public static AcceptController getInstance(AcceptView view, AttendanceRecordRepository attendanceRecordRepo, ModifiedRepository modifiedRepo) {
+    public static AcceptController getInstance(AcceptView view, IConfirmService confirmService) {
         if (instance == null) {
-            instance = new AcceptController(view, attendanceRecordRepo, modifiedRepo);
+            instance = new AcceptController(view, confirmService);
         }
         return instance;
     }
 
     private void setupViewActions() {
-        view.setOnConfirmAction (this::confirmAcceptance);
+        view.setOnConfirmAction(this::confirmAcceptance);
         view.setOnCancelAction(this::cancelAcceptance);
     }
 
-    public void confirmAcceptance(ModifiedRecord modifiedDTO) {
+    private void confirmAcceptance(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
-            handleModifiedDTO(modifiedDTO);
+            confirmService.handleAcceptAction(modifiedDTO);
             view.close();
             System.out.println("Chấp nhận yêu cầu thành công");
         }
@@ -44,23 +42,4 @@ public class AcceptController {
             view.close();
         }
     }
-
-    public void handleModifiedDTO(ModifiedRecord modifiedDTO) {
-        if ("Chỉnh sửa chấm công".equals(modifiedDTO.getRequestType())) {
-            attendanceRecordRepo.updateAttendanceRecord(modifiedDTO.getTime(), modifiedDTO.getRecordId());
-            modifiedRepo.updateAcceptModifiedStatus(modifiedDTO.getRequestId());
-        } else if ("Thêm chấm công".equals(modifiedDTO.getRequestType())) {
-            String newRecordId = attendanceRecordRepo.generateNextRecordId();
-            AttendanceRecord attendanceRecordDTO = new AttendanceRecord ();
-            attendanceRecordDTO.setRecordId(newRecordId);
-            attendanceRecordDTO.setEmployeeId(modifiedDTO.getEmployeeId());
-            attendanceRecordDTO.setDate(modifiedDTO.getDate());
-            attendanceRecordDTO.setTime(modifiedDTO.getTime());
-            attendanceRecordDTO.setFingerscannerId("0");
-            attendanceRecordRepo.insertAttendanceRecord(attendanceRecordDTO);
-            modifiedRepo.updateAcceptModifiedRecordId(modifiedDTO.getRequestId(), newRecordId);
-        }
-
-    }
-
 }

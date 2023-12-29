@@ -6,19 +6,19 @@ import hust.project.base.modified.View.RejectView;
 
 public class RejectController {
     private RejectView view;
-    private ModifiedRepository modifiedRepo;
+    private IConfirmService confirmService;
 
     private static RejectController instance;
 
-    private RejectController(RejectView view, ModifiedRepository modifiedRepo) {
+    public RejectController(RejectView view, IConfirmService confirmService) {
         this.view = view;
-        this.modifiedRepo = modifiedRepo;
+        this.confirmService = confirmService;
         setupViewActions();
     }
 
-    public static RejectController getInstance(RejectView view, ModifiedRepository modifiedRepo) {
+    public static RejectController getInstance(RejectView view, IConfirmService confirmService) {
         if (instance == null) {
-            instance = new RejectController(view, modifiedRepo);
+            instance = new RejectController(view, confirmService);
         }
         return instance;
     }
@@ -30,9 +30,9 @@ public class RejectController {
 
     private void confirmRejection(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
-            modifiedRepo.updateRejectModifiedStatus(modifiedDTO.getRequestId());
-            System.out.println("Từ chối thành công");
+            confirmService.handleRejectAction(modifiedDTO);
             view.close();
+            System.out.println("Từ chối thành công");
         }
     }
 
@@ -42,5 +42,4 @@ public class RejectController {
             view.close();
         }
     }
-
 }
