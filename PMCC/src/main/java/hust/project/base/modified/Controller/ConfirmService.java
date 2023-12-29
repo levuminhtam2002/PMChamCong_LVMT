@@ -21,6 +21,12 @@ public class ConfirmService implements IConfirmService{
             addAttendanceRecord(modifiedDTO);
         }
     }
+    public void handleRejectAction(ModifiedRecord modifiedDTO) {
+        if (modifiedDTO != null) {
+            modifiedRepo.updateRejectModifiedStatus(modifiedDTO.getRequestId());
+            System.out.println("Từ chối yêu cầu thành công");
+        }
+    }
 
     private void updateAttendanceRecord(ModifiedRecord modifiedDTO) {
         attendanceRecordRepo.updateAttendanceRecord(modifiedDTO.getTime(), modifiedDTO.getRecordId());
@@ -41,10 +47,4 @@ public class ConfirmService implements IConfirmService{
         System.out.println("Chấp nhận yêu cầu thêm chấm công thành công");
     }
 
-    public void handleRejectAction(ModifiedRecord modifiedDTO) {
-        if (modifiedDTO != null) {
-            modifiedRepo.updateRejectModifiedStatus(modifiedDTO.getRequestId());
-            System.out.println("Từ chối yêu cầu thành công");
-        }
-    }
 }

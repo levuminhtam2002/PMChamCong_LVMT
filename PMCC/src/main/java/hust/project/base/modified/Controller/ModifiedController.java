@@ -15,7 +15,6 @@ public class ModifiedController{
 
     private IConfirmService confirmService;
 
-
     private static ModifiedController instance;
 
     public static ModifiedController getInstance(ModifiedView view, ModifiedRepository modifiedRepository, AttendanceRecordRepository attendanceRecordRepository) {
