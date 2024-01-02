@@ -52,7 +52,8 @@ public class NavBarController {
                     case MODIFIED_SCREEN:
                         ModifiedRepository repository = new ModifiedEntity ();
                         PendingModifiedView modifiedView = PendingModifiedView.instance(); // Use the instance method if it's a singleton
-                        new PendingModifiedController(modifiedView, repository);
+//                        new PendingModifiedController(modifiedView, repository);
+                        PendingModifiedController pendingModifiedController = PendingModifiedController.getInstance(modifiedView, repository);
                         HomeController.instance().changeScreen(modifiedView);
                         System.out.println("Navigated to Modified!");
                         break;
