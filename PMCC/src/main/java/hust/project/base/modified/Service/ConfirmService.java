@@ -1,4 +1,4 @@
-package hust.project.base.modified.Controller;
+package hust.project.base.modified.Service;
 
 import hust.project.base.modified.Model.AttendanceRecord;
 import hust.project.base.modified.Model.AttendanceRecordRepository;
@@ -29,8 +29,9 @@ public class ConfirmService implements IConfirmService{
     }
 
     private void updateAttendanceRecord(ModifiedRecord modifiedDTO) {
+        String preTime = attendanceRecordRepo.getAttendanceRecordByRecordId(modifiedDTO.getRecordId()).getTime();
         attendanceRecordRepo.updateAttendanceRecord(modifiedDTO.getTime(), modifiedDTO.getRecordId());
-        modifiedRepo.updateAcceptModifiedStatus(modifiedDTO.getRequestId());
+        modifiedRepo.updateAcceptModifiedStatus(modifiedDTO.getRequestId(), preTime);
         System.out.println("Chấp nhận yêu cầu chỉnh sửa chấm công thành công");
     }
 

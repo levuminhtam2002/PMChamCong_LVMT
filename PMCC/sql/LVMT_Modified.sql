@@ -25,6 +25,7 @@ CREATE TABLE pmchamcong.modifiedattendancerecords (
     record_id CHAR(10),
     scan_id CHAR(10),
     employee_id CHAR(10),
+    pre_time VARCHAR(10),
     date VARCHAR(10),
     time VARCHAR(8),
     time_modified VARCHAR(8),

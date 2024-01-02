@@ -19,7 +19,7 @@ public class ModifiedEntity implements ModifiedRepository {
     public List<ModifiedRecord> getAllModifiedDTO() {
         try {
             SQLJavaBridge bridge = DatabaseManager.instance ().defaulSQLJavaBridge ();
-            String query = "SELECT request_id, record_id, scan_id, employee_id, date, time, time_modified, date_modified, request_reason, request_status, request_type FROM pmchamcong.modifiedattendancerecords";
+            String query = "SELECT request_id, record_id, scan_id, employee_id, pre_time, date, time, time_modified, date_modified, request_reason, request_status, request_type FROM pmchamcong.modifiedattendancerecords";
             JsonArray json = bridge.query (query);
             List<ModifiedRecord> modifiedRequests = new ArrayList<> ();
             for (JsonElement element : json) {
@@ -28,6 +28,7 @@ public class ModifiedEntity implements ModifiedRepository {
                 String recordId = obj.has("record_id") && !obj.get("record_id").isJsonNull() ? obj.get("record_id").getAsString() : "******";
                 String scanId = obj.has("scan_id") && !obj.get("scan_id").isJsonNull() ? obj.get("scan_id").getAsString() : "******";
                 String employeeId = obj.get ("employee_id").getAsString ();
+                String preTime = obj.has ("pre_time") && !obj.get ("pre_time").isJsonNull () ? obj.get ("pre_time").getAsString () : "******";
                 String date = obj.get ("date").getAsString ();
                 String time = obj.get ("time").getAsString ();
                 String timeModified = obj.has ("time_modified") && !obj.get ("time_modified").isJsonNull () ? obj.get ("time_modified").getAsString () : "******";
@@ -35,7 +36,7 @@ public class ModifiedEntity implements ModifiedRepository {
                 String requestReason = obj.get ("request_reason").getAsString ();
                 String requestStatus = obj.get ("request_status").getAsString ();
                 String requestType = obj.get("request_type").getAsString ();
-                ModifiedRecord modifiedDTO = new ModifiedRecord (requestId, recordId, scanId, employeeId, date, time, timeModified, dateModified, requestReason, requestStatus, requestType);
+                ModifiedRecord modifiedDTO = new ModifiedRecord (requestId, recordId, scanId, employeeId,preTime, date, time, timeModified, dateModified, requestReason, requestStatus, requestType);
                 modifiedRequests.add (modifiedDTO);
             }
             return modifiedRequests;
@@ -44,14 +45,14 @@ public class ModifiedEntity implements ModifiedRepository {
             return new ArrayList<> ();
         }
     }
-    public void updateAcceptModifiedStatus(String requestId) {
+    public void updateAcceptModifiedStatus(String requestId, String preTime) {
         SQLJavaBridge bridge = DatabaseManager.instance().defaulSQLJavaBridge();
         try {
 
             String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             String currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-            String query2 = "UPDATE modifiedattendancerecords SET request_status = 'Accepted', date_modified = ?, time_modified = ? WHERE request_id = ?";
-            bridge.update(query2, currentDate, currentTime, requestId);
+            String query2 = "UPDATE modifiedattendancerecords SET request_status = 'Accepted', date_modified = ?, time_modified = ?, pre_time = ? WHERE request_id = ?";
+            bridge.update(query2, currentDate, currentTime,preTime, requestId);
 
         } catch (Exception e) {
             e.printStackTrace();

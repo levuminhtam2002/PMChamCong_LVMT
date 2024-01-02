@@ -1,11 +1,14 @@
-package hust.project.base.modified.Controller;
+package hust.project.base.modified.modified;
 
+import hust.project.base.modified.Accept.AcceptController;
+import hust.project.base.modified.Service.ConfirmService;
+import hust.project.base.modified.Service.IConfirmService;
+import hust.project.base.modified.reject.RejectController;
 import hust.project.base.modified.Model.AttendanceRecordRepository;
 import hust.project.base.modified.Model.ModifiedRecord;
 import hust.project.base.modified.Model.ModifiedRepository;
-import hust.project.base.modified.View.AcceptView;
-import hust.project.base.modified.View.ModifiedView;
-import hust.project.base.modified.View.RejectView;
+import hust.project.base.modified.Accept.AcceptView;
+import hust.project.base.modified.reject.RejectView;
 
 
 public class ModifiedController{
@@ -29,7 +32,7 @@ public class ModifiedController{
         this.view = view;
         this.modifiedRepository = modifiedRepository;
         this.attendanceRecordRepository = attendanceRecordRepository;
-        this.confirmService = new ConfirmService(attendanceRecordRepository,modifiedRepository);
+        this.confirmService = new ConfirmService (attendanceRecordRepository,modifiedRepository);
         setupViewActions();
     }
     public void setupViewActions() {

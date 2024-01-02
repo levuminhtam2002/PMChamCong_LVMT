@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ModifiedRepository {
 
-    void updateAcceptModifiedStatus(String requestIdO);
+    void updateAcceptModifiedStatus(String requestId, String preTime);
 
     List<ModifiedRecord> getAllModifiedDTO();
 

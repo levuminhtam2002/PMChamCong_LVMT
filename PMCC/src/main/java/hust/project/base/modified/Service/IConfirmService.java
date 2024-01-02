@@ -1,4 +1,4 @@
-package hust.project.base.modified.Controller;
+package hust.project.base.modified.Service;
 
 import hust.project.base.modified.Model.ModifiedRecord;
 

@@ -5,6 +5,8 @@ public class ModifiedRecord {
     private String recordId;
     private String scanId; //khong can
     private String employeeId;
+
+    private String preTime;
     private String date;
     private String time;
     private String timeModified;
@@ -15,11 +17,12 @@ public class ModifiedRecord {
     private String requestType;
 
     // Constructor
-    public ModifiedRecord(String requestId, String recordId, String scanId, String employeeId, String date, String time, String timeModified, String dateModified, String requestReason, String requestStatus, String requestType) {
+    public ModifiedRecord(String requestId, String recordId, String scanId, String employeeId, String preTime, String date, String time, String timeModified, String dateModified, String requestReason, String requestStatus, String requestType) {
         this.requestId = requestId;
         this.recordId = recordId;
         this.scanId = scanId;
         this.employeeId = employeeId;
+        this.preTime = preTime;
         this.date = date;
         this.time = time;
         this.timeModified = timeModified;
@@ -42,6 +45,13 @@ public class ModifiedRecord {
     }
     public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public String getPreTime() {
+        return preTime;
+    }
+    public void setPreTime(String preTime) {
+        this.preTime = preTime;
     }
 
     public String getDate() {

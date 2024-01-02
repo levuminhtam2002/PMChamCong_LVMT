@@ -1,6 +1,7 @@
-package hust.project.base.modified.View;
+package hust.project.base.modified.reject;
 
 import hust.project.base.modified.Model.ModifiedRecord;
+import hust.project.base.modified.pendingModified.PendingModifiedView;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;

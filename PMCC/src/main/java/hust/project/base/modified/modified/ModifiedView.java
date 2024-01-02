@@ -1,11 +1,10 @@
 
-package hust.project.base.modified.View;
+package hust.project.base.modified.modified;
 
 import hust.project.base.employee_subsystem.Department;
 import hust.project.base.employee_subsystem.Employee;
 import hust.project.base.employee_subsystem.HRService;
 import hust.project.base.employee_subsystem.IHRService;
-import hust.project.base.modified.Controller.ModifiedController;
 import hust.project.base.modified.Model.AttendanceRecordEntity;
 import hust.project.base.modified.Model.AttendanceRecord;
 import hust.project.base.modified.Model.AttendanceRecordRepository;
@@ -87,7 +86,13 @@ public class ModifiedView {
         if (!data.getRecordId().equals ("******")) {
             record = repository.getAttendanceRecordByRecordId(data.getRecordId());
             dateField = new TextField(record.getDate());
-            originalRecordField = new TextField(record.getTime ());
+            if (data.getRequestStatus().equals ("Accepted") && !data.getPreTime().equals ("******")) {
+                originalRecordField = new TextField(data.getPreTime());
+            }else if (data.getRequestStatus().equals ("Accepted") && data.getPreTime().equals ("******")) {
+                originalRecordField = new TextField ("");
+            }else {
+                originalRecordField = new TextField(record.getTime());
+            }
             scannerIdField = new TextField(record.getFingerscannerId());
             recordIdField = new TextField(record.getRecordId());
         } else {

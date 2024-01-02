@@ -8,8 +8,8 @@ import hust.project.base.modified.Model.ModifiedEntity;
 import hust.project.base.modified.Model.ModifiedRepository;
 import hust.project.base.summary_logs.SummaryDepartmentController;
 import hust.project.base.summary_logs.SummaryDepartmentView;
-import hust.project.base.modified.View.PendingModifiedView;
-import hust.project.base.modified.Controller.PendingModifiedController;
+import hust.project.base.modified.pendingModified.PendingModifiedView;
+import hust.project.base.modified.pendingModified.PendingModifiedController;
 
 public class NavBarController {
     private final NavbarView navbar = NavbarView.instance();

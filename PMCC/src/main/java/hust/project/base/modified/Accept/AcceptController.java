@@ -1,8 +1,7 @@
-package hust.project.base.modified.Controller;
+package hust.project.base.modified.Accept;
 
+import hust.project.base.modified.Service.IConfirmService;
 import hust.project.base.modified.Model.*;
-import hust.project.base.modified.View.AcceptView;
-import javafx.application.Platform;
 
 public class AcceptController {
     private AcceptView view;

@@ -1,10 +1,9 @@
-package hust.project.base.modified.Controller;
+package hust.project.base.modified.pendingModified;
 
 import hust.project.base.modified.Model.*;
-import hust.project.base.modified.View.ModifiedView;
-import hust.project.base.modified.View.PendingModifiedView;
+import hust.project.base.modified.modified.ModifiedController;
+import hust.project.base.modified.modified.ModifiedView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PendingModifiedController {

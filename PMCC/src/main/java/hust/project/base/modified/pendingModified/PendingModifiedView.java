@@ -1,4 +1,4 @@
-package hust.project.base.modified.View;
+package hust.project.base.modified.pendingModified;
 
 import hust.project.base.modified.Model.*;
 import javafx.collections.FXCollections;

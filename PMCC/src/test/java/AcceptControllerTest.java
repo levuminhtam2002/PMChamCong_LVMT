@@ -1,13 +1,9 @@
-import hust.project.base.modified.Controller.AcceptController;
-import hust.project.base.modified.Controller.IConfirmService;
-import hust.project.base.modified.Model.AttendanceRecord;
-import hust.project.base.modified.Model.AttendanceRecordRepository;
+import hust.project.base.modified.Accept.AcceptController;
+import hust.project.base.modified.Service.IConfirmService;
 import hust.project.base.modified.Model.ModifiedRecord;
-import hust.project.base.modified.Model.ModifiedRepository;
-import hust.project.base.modified.View.AcceptView;
+import hust.project.base.modified.Accept.AcceptView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;

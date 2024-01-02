@@ -1,8 +1,7 @@
-package hust.project.base.modified.Controller;
+package hust.project.base.modified.reject;
 
+import hust.project.base.modified.Service.IConfirmService;
 import hust.project.base.modified.Model.ModifiedRecord;
-import hust.project.base.modified.Model.ModifiedRepository;
-import hust.project.base.modified.View.RejectView;
 
 public class RejectController {
     private RejectView view;
