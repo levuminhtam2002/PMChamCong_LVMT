@@ -29,7 +29,7 @@ public class AcceptController {
 
     public void confirmAcceptance(ModifiedRecord modifiedDTO) {
         if (modifiedDTO != null) {
-            confirmService.handleAcceptAction(modifiedDTO);
+            confirmService.handleModifiedDTO (modifiedDTO);
             view.close();
             System.out.println("Chấp nhận yêu cầu thành công");
         }

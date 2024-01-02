@@ -23,7 +23,7 @@ class AcceptControllerTest {
     void testConfirmAcceptance() {
         ModifiedRecord modifiedDTO = mock(ModifiedRecord.class);
         acceptController.confirmAcceptance(modifiedDTO);
-        verify(confirmService).handleAcceptAction(modifiedDTO);
+        verify(confirmService).handleModifiedDTO (modifiedDTO);
         verify(view).close();
     }
 

@@ -14,7 +14,7 @@ public class ConfirmService implements IConfirmService{
         this.modifiedRepo = modifiedRepo;
     }
 
-    public void handleAcceptAction(ModifiedRecord modifiedDTO) {
+    public void handleModifiedDTO(ModifiedRecord modifiedDTO) {
         if ("Chỉnh sửa chấm công".equals(modifiedDTO.getRequestType())) {
             updateAttendanceRecord(modifiedDTO);
         } else if ("Thêm chấm công".equals(modifiedDTO.getRequestType())) {

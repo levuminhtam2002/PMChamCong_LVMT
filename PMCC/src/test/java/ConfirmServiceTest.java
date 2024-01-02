@@ -27,7 +27,7 @@ class ConfirmServiceTest {
         when(mockRecord.getTime()).thenReturn("08:30:00");
         when(attendanceRecordRepo.getAttendanceRecordByRecordId("RECORD001")).thenReturn(mockRecord);
         ModifiedRecord modifiedDTO = new ModifiedRecord("REQ001", "RECORD001", "SCAN0001", "EMP00001", null,"16-12-2023", "08:30:00", null, null, "Dấu thời gian không chính xác", "Pending", "Chỉnh sửa chấm công");
-        confirmService.handleAcceptAction(modifiedDTO);
+        confirmService.handleModifiedDTO (modifiedDTO);
         verify(attendanceRecordRepo, times(1)).updateAttendanceRecord(modifiedDTO.getTime(), modifiedDTO.getRecordId());
         verify(modifiedRepo, times(1)).updateAcceptModifiedStatus(modifiedDTO.getRequestId(),"08:30:00");
     }
@@ -36,7 +36,7 @@ class ConfirmServiceTest {
     void testHandleAcceptActionForAdd() {
         ModifiedRecord modifiedDTO = new ModifiedRecord("REQ002", null, null, "EMP00002", null,"16-12-2023", "08:35:00", null, null, "Máy quét hỏng", "Pending", "Thêm chấm công");
         when(attendanceRecordRepo.generateNextRecordId()).thenReturn("RECORD007");
-        confirmService.handleAcceptAction(modifiedDTO);
+        confirmService.handleModifiedDTO (modifiedDTO);
         verify(attendanceRecordRepo, times(1)).generateNextRecordId();
         verify(attendanceRecordRepo, times(1)).insertAttendanceRecord(any(AttendanceRecord.class));
         verify(modifiedRepo, times(1)).updateAcceptModifiedRecordId(modifiedDTO.getRequestId(), "RECORD007");
@@ -119,14 +119,14 @@ class ConfirmServiceTest {
     void testInsertAttendanceRecordSuccess() {
         ModifiedRecord modifiedRecord = new ModifiedRecord("REQ001", "RECORD001", "SCAN0001", "EMP001", null,"16-12-2023", "08:00:00", null, null, "Dấu thời gian không chính xác", "Pending", "Thêm chấm công");
         when(attendanceRecordRepo.generateNextRecordId()).thenReturn("RECORD001");
-        confirmService.handleAcceptAction (modifiedRecord);
+        confirmService.handleModifiedDTO (modifiedRecord);
         verify(attendanceRecordRepo, times(1)).insertAttendanceRecord(any(AttendanceRecord.class));
     }
     @Test
     void testInsertAttendanceRecordWithExistingId() {
         ModifiedRecord modifiedRecord = new ModifiedRecord("REQ002", null, null, "EMP002", null,"16-12-2023", "09:00:00", null, null, "Máy quét hỏng", "Pending", "Thêm chấm công");
         when(attendanceRecordRepo.generateNextRecordId()).thenReturn("RECORD001");
-        confirmService.handleAcceptAction (modifiedRecord);
+        confirmService.handleModifiedDTO (modifiedRecord);
         verify(attendanceRecordRepo, times(1)).insertAttendanceRecord(any(AttendanceRecord.class));
     }
 }
